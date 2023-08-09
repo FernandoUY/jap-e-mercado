@@ -53,8 +53,8 @@
           <div class="col-sm-6 col-md-7 my-auto">
             <img src="/img/login.png" alt="Login" class="w-100" />
           </div>
-          <form class="col px-5">
-            <div class="form-floating mb-3">
+          <form id="loginForm" class="col px-5">
+            <div class="form-floating mb-3" id="input-group-email">
               <input
                 type="email"
                 class="form-control"
@@ -64,7 +64,7 @@
               />
               <label for="emailInput">Correo</label>
             </div>
-            <div class="form-floating mb-3">
+            <div class="form-floating mb-3" id="input-group-password">
               <input
                 type="password"
                 class="form-control"
@@ -75,8 +75,10 @@
               <label for="passwordInput">Contraseña</label>
             </div>
             <div class="d-flex flex-column gap-2">
-              <button class="btn btn-primary">Ingresar</button>
-              <button class="btn btn-outline-primary">Registrarse</button>
+              <button class="btn btn-primary" type="submit">Ingresar</button>
+              <button class="btn btn-outline-primary" id="registrarse">
+                Registrarse
+              </button>
             </div>
           </form>
         </div>
