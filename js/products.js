@@ -1,10 +1,13 @@
 let container = document.getElementById("container");
+let catName = document.getElementById("catName");
 let data = {};
 
-async function fetchCars() {
+async function fetchProducts() {
+  const catID = localStorage.getItem("catID");
+
   try {
     const response = await fetch(
-      "https://japceibal.github.io/emercado-api/cats_products/101.json"
+      `https://japceibal.github.io/emercado-api/cats_products/${catID}.json`
     );
     const data = await response.json();
     return data;
@@ -14,7 +17,8 @@ async function fetchCars() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  data = await fetchCars();
+  data = await fetchProducts();
+  catName.textContent = data.catName;
   data.products.map((product) => {
     container.innerHTML += `
     <div class="card mt-3 mx-auto" style="max-width: 80%">
