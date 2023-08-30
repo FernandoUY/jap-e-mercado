@@ -2,6 +2,18 @@ let container = document.getElementById("container");
 let catName = document.getElementById("catName");
 let data = {};
 
+document.addEventListener("DOMContentLoaded", () => {
+  if (!localStorage.getItem("token")) {
+    window.location = "login.html";
+  } else {
+    document.getElementById("dropdown").innerHTML += `
+    <ul class="dropdown-menu dropdown-menu-dark">
+      <li><a class="dropdown-item" href="/signout.html">Cerrar sesión</a></li>
+    </ul>
+    `;
+  }
+});
+
 async function fetchProducts() {
   const catID = localStorage.getItem("catID");
 

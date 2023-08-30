@@ -1,8 +1,7 @@
-.jumbotron,
-.card-body,
-.container,
-.site-header {
-  font-family: 'Verdana', serif !important;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Ubuntu+Mono:wght@700&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
 }
 
 .jumbotron .display-4 {
@@ -32,11 +31,13 @@ nav a {
   height: 50vh;
   padding: 5em inherit;
   margin-bottom: 0;
-  background-color: #53C0FB;
-  background: url('../img/cover_back.png');
-  background-size: cover;
-  background-position: center;
+  background-color: #53c0fb;
+  background: url("../img/cover_back.svg");
+  background-size: contain;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-origin: border-box;
   color: black;
   font-weight: bold;
 }
@@ -67,18 +68,37 @@ nav a {
   font-size: 38px;
 }
 
+.jumbotron > h1 {
+  font-size: 5rem;
+  font-family: "Ubuntu Mono", monospace;
+}
+
+.jumbotron > h1 > span {
+  color: #f09100;
+  font-size: 6rem;
+}
+
+.jumbotron > h2 {
+  color: #f09100;
+  font-family: "Ubuntu Mono", monospace;
+}
+
+.jumbotron > small {
+  color: gray;
+}
+
 footer {
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
 
 footer p {
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
 }
 
 .site-header a {
   color: white;
-  transition: ease-in-out color .15s;
+  transition: ease-in-out color 0.15s;
 }
 
 .site-header .dropdown-menu a {
@@ -86,7 +106,7 @@ footer p {
 }
 
 .dropzone {
-  border: 2px dashed #0087F7;
+  border: 2px dashed #0087f7;
   border-radius: 5px;
   background: white;
 }
@@ -187,4 +207,16 @@ a.custom-card:hover {
 
 .checked {
   color: orange;
+}
+
+.hover-effect:hover {
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+.active {
+  color: #f09100 !important;
+}
+
+.mt-5 {
+  padding-top: 30px !important;
 }
