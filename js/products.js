@@ -28,12 +28,25 @@ async function fetchProducts() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", async function () {
-  data = await fetchProducts();
-  catName.textContent = data.catName;
-  data.products.map((product) => {
-    container.innerHTML += `
-    <div class="card mt-3 mx-auto" style="max-width: 80%">
+  document.addEventListener("DOMContentLoaded", async function () {
+    data = await fetchProducts();
+    catName.textContent = data.catName;
+
+    const Buscador = document.getElementById("Buscador"); //traemos el buscador
+
+    Buscador.addEventListener("input", function () {
+      const busquedaUser = Buscador.value.toLowerCase(); //se obtiene lo que el usuario escribe y de pasa a minusculas
+      const productosFiltrados = data.products.filter(product =>
+        product.name.toLowerCase().includes(busquedaUser) ||
+        product.description.toLowerCase().includes(busquedaUser)
+      ); //buscamos en el nombre y la descripcion lo que se ingresa en el bucador
+
+      container.innerHTML = ""; // Limpia los productos anteriores
+
+      productosFiltrados.map(product => {  //se modifico esta parte para que muestre los productos filtrados
+        container.innerHTML += `
+      <div class="card mt-3 mx-auto" style="max-width: 80%">
+         <div class="card mt-3 mx-auto" style="max-width: 80%">
       <div class="row g-0">
         <div class="col-md-4">
           <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -50,5 +63,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       </div>
     </div>
     `;
+      });
+    });
+
+    // Mostrar todos los productos al cargar la página
+    Buscador.dispatchEvent(new Event("input"));
   });
-});
