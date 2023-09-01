@@ -67,10 +67,25 @@
         <!-- Name of category rendered -->
       </strong>
     </p>
-
-    <!-- agrego la barra del buscador-->
-    <input type="search" id="buscador" placeholder="Buscar productos" />
     <main class="pb-5 container">
+      <!--This conteiner is for the filters papa!!!-->
+      <div id="filter-conteiner">
+        <input id="min" type="number" name="min" placeholder="min" />
+        <input id="max" type="number" name="Max" placeholder="Max" />
+        <button id="filterd">Filtrar</button>
+        <button id="up">
+          <img src="img/icons8-sort-amount-up-32.png" alt="" />
+        </button>
+        <button id="down">
+          <img src="img/icons8-clasificación-ascendente-30.png" alt="" />
+        </button>
+        <button id="sold">
+          <img src="img/icons8-clasificación-numérica.gif" alt="" />
+        </button>
+        <button class="btn btn-link btn-sm" id="clearRangeFilter">
+          Limpiar
+        </button>
+      </div>
       <div id="container" class="container">
         <!-- This container is where cars are rendered -->
       </div>
