@@ -7,5 +7,7 @@ const token = () => {
 };
 
 document.addEventListener("submit", function () {
+  const emailValue = document.getElementById("emailInput").value //se obtiene el valor del email
   localStorage.setItem("token", token());
+  localStorage.setItem("user", emailValue);
 });
