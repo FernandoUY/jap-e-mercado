@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   catName.textContent = data.catName;
 
   // Traemos el buscador
-  const buscador = document.getElementById("Buscador");
+  const buscador = document.getElementById("buscador");
 
   buscador.addEventListener("input", function () {
     // Se obtiene lo que el usuario escribe y de pasa a minusculas
