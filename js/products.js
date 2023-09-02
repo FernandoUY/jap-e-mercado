@@ -2,8 +2,6 @@ let container = document.getElementById("container");
 let catName = document.getElementById("catName");
 let data = {};
 
-  
-
 // Función que trae los productos según la id de la categoría
 async function fetchProducts() {
   // Buscamos la id de la categoría en localStorage
@@ -33,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const buscador = document.getElementById("buscador");
 
   buscador.addEventListener("input", function () {
-    // Se obtiene lo que el usuario escribe y de pasa a minusculas
+    // Se obtiene lo que el usuario escribe y se pasa a minúsculas
     const busquedaUser = buscador.value.toLowerCase();
 
     // Buscamos en el nombre y la descripcion lo que se ingresa en el bucador
@@ -49,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     productosFiltrados.map((product) => {
       // Se modifico esta parte para que muestre los productos filtrados
       container.innerHTML += `
-        <div class="card mt-3 mx-auto" style="max-width: 80%">
+        <div class="card mt-3 mx-auto">
           <div class="row g-0">
             <div class="col-md-4">
             <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -69,12 +67,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // Mostrar todos los productos al cargar la página
-  buscador.dispatchEvent(new Event("input"));
+
   data = await fetchProducts();
   catName.textContent = data.catName;
   data.products.map((product) => {
     container.innerHTML += `
-    <div class="card mt-3 mx-auto" style="max-width: 80%">
+    <div class="card mt-3 mx-auto">
       <div class="row g-0">
         <div class="col-md-4">
           <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -95,23 +93,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 async function filterRange() {
-  const arrayProductos = await fetchProducts();
+  data = await fetchProducts();
   const max = document.getElementById("rangeFilterCountMax").value;
   const min = document.getElementById("rangeFilterCountMin").value;
-  const filterProducts = arrayProductos.products.filter((product) => {
-    //* utilizando cada elemento(productos) del array,me retorna los elementos (productos) filtrados
+  // Filtramos los productos según los rangos definidos
+  const filterProducts = data.products.filter((product) => {
+    // Si no se define un máximo solo se buscan productos mayores o iguales al costo mínimo definido
+    if (!max) {
+      return product.cost >= min;
+    }
+    // Si se define mínimo y máximo se buscan productos que tengas el costo entre el mínimo y el máximo definidos
     return product.cost >= min && product.cost <= max;
   });
+  // Por defecto si no se define máximo ni mínimo retornamos todos los productos
   return filterProducts;
 }
 const filter = document.getElementById("rangeFilterCount");
 filter.addEventListener("click", async () => {
   container.innerHTML = "";
-  console.log(container);
-  const filterProducts = await filterRange();
-  for (let product of filterProducts) {
+  data = await filterRange();
+  for (let product of data) {
     container.innerHTML += `
-          <div class="card mt-3 mx-auto" style="max-width: 80%">
+          <div class="card mt-3 mx-auto">
             <div class="row g-0">
               <div class="col-md-4">
                 <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -132,14 +135,14 @@ filter.addEventListener("click", async () => {
 });
 const up = document.getElementById("sortAsc");
 up.addEventListener("click", async () => {
-  const filterup = await fetchProducts();
-  const save = filterup.products.sort((a, b) => a.cost - b.cost);
-  filterup.products = save;
+  data = await fetchProducts();
+  const save = data.products.sort((a, b) => a.cost - b.cost);
+  data.products = save;
   console.log(save);
   container.innerHTML = "";
-  for (let product of filterup.products) {
+  for (let product of data.products) {
     container.innerHTML += `
-          <div class="card mt-3 mx-auto" style="max-width: 80%">
+          <div class="card mt-3 mx-auto">
             <div class="row g-0">
               <div class="col-md-4">
                 <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -160,14 +163,14 @@ up.addEventListener("click", async () => {
 });
 const down = document.getElementById("sortDesc");
 down.addEventListener("click", async () => {
-  const filterdown = await fetchProducts();
-  const save = filterdown.products.sort((a, b) => b.cost - a.cost);
-  filterdown.products = save;
+  data = await fetchProducts();
+  const save = data.products.sort((a, b) => b.cost - a.cost);
+  data.products = save;
   console.log(save);
   container.innerHTML = "";
-  for (let product of filterdown.products) {
+  for (let product of data.products) {
     container.innerHTML += `
-          <div class="card mt-3 mx-auto" style="max-width: 80%">
+          <div class="card mt-3 mx-auto">
             <div class="row g-0">
               <div class="col-md-4">
                 <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -188,14 +191,14 @@ down.addEventListener("click", async () => {
 });
 const sold = document.getElementById("sortByCount");
 sold.addEventListener("click", async () => {
-  const filtersold = await fetchProducts();
-  const save = filtersold.products.sort((a, b) => b.soldCount - a.soldCount);
-  filtersold.products = save;
+  data = await fetchProducts();
+  const save = data.products.sort((a, b) => b.soldCount - a.soldCount);
+  data.products = save;
   console.log(save);
   container.innerHTML = "";
-  for (let product of filtersold.products) {
+  for (let product of data.products) {
     container.innerHTML += `
-          <div class="card mt-3 mx-auto" style="max-width: 80%">
+          <div class="card mt-3 mx-auto">
             <div class="row g-0">
               <div class="col-md-4">
                 <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -222,7 +225,7 @@ clear.addEventListener("click", async function () {
   catName.textContent = data.catName;
   data.products.map((product) => {
     container.innerHTML += `
-    <div class="card mt-3 mx-auto" style="max-width: 80%">
+    <div class="card mt-3 mx-auto">
       <div class="row g-0">
         <div class="col-md-4">
           <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
@@ -241,5 +244,3 @@ clear.addEventListener("click", async function () {
     `;
   });
 });
-
-

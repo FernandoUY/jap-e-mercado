@@ -221,18 +221,4 @@ a.custom-card:hover {
   padding-top: 30px !important;
 }
 
-
-
 /*para poner la lupa en el buscador*/
-
-#buscador{
-  text-align: center;
-}
-
-#searc-group{
-  display: flex;
-  justify-content: center;
-  margin-left: 45%;
-  margin-right: 45%;
-  border-radius: 5px;
-}
