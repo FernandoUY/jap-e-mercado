@@ -221,10 +221,4 @@ a.custom-card:hover {
   padding-top: 30px !important;
 }
 
-input#buscador {
-  margin: auto;
-  margin-left: 45%;
-  margin-right: 45%;
-  border-radius: 5px;
-  text-align: center;
-}
+/*para poner la lupa en el buscador*/

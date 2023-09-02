@@ -48,7 +48,7 @@
             <li class="nav-item dropdown" id="dropdown">
               <a
                 class="nav-link dropdown-toggle"
-                href="#"
+                href="signout.html"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -69,14 +69,96 @@
       </strong>
     </p>
 
-    <!-- agrego la barra del buscador-->
-    <input type="search" id="buscador" placeholder="Buscar productos" />
     <main class="pb-5 container">
+      <!-- agrego la barra del buscador-->
 
+      <div class="input-group mb-3">
+        <span class="input-group-text fa-solid fa-magnifyng-glass"
+          ><i class="fa-solid fa-magnifying-glass"></i
+        ></span>
+        <input
+          type="search"
+          id="buscador"
+          class="form-control"
+          placeholder="Buscar productos..."
+        />
+      </div>
+
+      <!-- <i id="searc-group" class="fa-solid fa-magnifying-glass">
+        <input type="search" class="form-control" id="buscador" />
+      </i> -->
+
+      <!--Se agrega los botones de filtrado-->
+      <div class="row">
+        <div class="col text-end">
+          <div class="btn-group btn-group-toggle mb-4" data-bs-toggle="buttons">
+            <input type="radio" class="btn-check" name="options" id="sortAsc" />
+            <label class="btn btn-light" for="sortAsc">
+              <i class="fa-solid fa-arrow-up-short-wide"></i>
+              $
+            </label>
+            <input
+              type="radio"
+              class="btn-check"
+              name="options"
+              id="sortDesc"
+            />
+            <label class="btn btn-light" for="sortDesc">
+              <i class="fa-solid fa-arrow-down-wide-short"></i>
+              $
+            </label>
+            <input
+              type="radio"
+              class="btn-check"
+              name="options"
+              id="sortByCount"
+              checked
+            />
+            <label class="btn btn-light" for="sortByCount"
+              ><i class="fas fa-sort-amount-down mr-1"></i>
+              Rel.
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 offset-lg-6 col-md-12 mb-1 container">
+          <div class="row container p-0 m-0">
+            <div class="col">
+              <p class="font-weight-normal text-end my-2">Cant.</p>
+            </div>
+            <div class="col">
+              <input
+                class="form-control"
+                type="number"
+                placeholder="min."
+                id="rangeFilterCountMin"
+              />
+            </div>
+            <div class="col">
+              <input
+                class="form-control"
+                type="number"
+                placeholder="max."
+                id="rangeFilterCountMax"
+              />
+            </div>
+            <div class="col-3 p-0">
+              <div class="btn-group" role="group">
+                <button class="btn btn-light btn-block" id="rangeFilterCount">
+                  Filtrar
+                </button>
+                <button class="btn btn-link btn-sm" id="clearRangeFilter">
+                  Limpiar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="container" class="container">
         <!-- This container is where cars are rendered -->
       </div>
-      
     </main>
     <footer class="text-muted">
       <div class="container">
@@ -110,5 +192,9 @@
     <script src="js/init.js"></script>
     <script src="js/products.js"></script>
     <script src="js/validacion.js"></script>
+    <script
+      src="https://kit.fontawesome.com/ea3d154144.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
