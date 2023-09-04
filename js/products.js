@@ -44,52 +44,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Limpia los productos anteriores
     container.innerHTML = "";
 
-    productosFiltrados.map((product) => {
-      // Se modifico esta parte para que muestre los productos filtrados
-      container.innerHTML += `
-        <div class="card mt-3 mx-auto">
-          <div class="row g-0">
-            <div class="col-md-4">
-            <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-          </div>
-          <div class="col-md-8 p-2">
-            <div class="card-body">
-              <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-              <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-              <p class="card-text">
-                ${product.description}
-              </p>
-            </div>
-          </div>
-        </div>
-        `;
-    });
+    // Se modifico esta parte para que muestre los productos filtrados
+    productosFiltrados.map((product) => showProduct(product));
   });
 
   // Mostrar todos los productos al cargar la página
 
   data = await fetchProducts();
   catName.textContent = data.catName;
-  data.products.map((product) => {
-    container.innerHTML += `
-    <div class="card mt-3 mx-auto">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-        </div>
-        <div class="col-md-8 p-2">
-          <div class="card-body">
-          <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-            <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-            <p class="card-text">
-              ${product.description}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    `;
-  });
+  data.products.map((product) => showProduct(product));
 });
 
 async function filterRange() {
@@ -112,110 +75,32 @@ const filter = document.getElementById("rangeFilterCount");
 filter.addEventListener("click", async () => {
   container.innerHTML = "";
   data = await filterRange();
-  for (let product of data) {
-    container.innerHTML += `
-          <div class="card mt-3 mx-auto">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-              </div>
-              <div class="col-md-8 p-2">
-                <div class="card-body">
-                <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-                  <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-                  <p class="card-text">
-                    ${product.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          `;
-  }
+  console.log(data);
+  data.map((product) => showProduct(product));
 });
 const up = document.getElementById("sortAsc");
 up.addEventListener("click", async () => {
   data = await fetchProducts();
   const save = data.products.sort((a, b) => a.cost - b.cost);
   data.products = save;
-  console.log(save);
   container.innerHTML = "";
-  for (let product of data.products) {
-    container.innerHTML += `
-          <div class="card mt-3 mx-auto">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-              </div>
-              <div class="col-md-8 p-2">
-                <div class="card-body">
-                <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-                  <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-                  <p class="card-text">
-                    ${product.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          `;
-  }
+  data.products.map((product) => showProduct(product));
 });
 const down = document.getElementById("sortDesc");
 down.addEventListener("click", async () => {
   data = await fetchProducts();
   const save = data.products.sort((a, b) => b.cost - a.cost);
   data.products = save;
-  console.log(save);
   container.innerHTML = "";
-  for (let product of data.products) {
-    container.innerHTML += `
-          <div class="card mt-3 mx-auto">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-              </div>
-              <div class="col-md-8 p-2">
-                <div class="card-body">
-                <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-                  <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-                  <p class="card-text">
-                    ${product.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          `;
-  }
+  data.products.map((product) => showProduct(product));
 });
 const sold = document.getElementById("sortByCount");
 sold.addEventListener("click", async () => {
   data = await fetchProducts();
   const save = data.products.sort((a, b) => b.soldCount - a.soldCount);
   data.products = save;
-  console.log(save);
   container.innerHTML = "";
-  for (let product of data.products) {
-    container.innerHTML += `
-          <div class="card mt-3 mx-auto">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-              </div>
-              <div class="col-md-8 p-2">
-                <div class="card-body">
-                <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-                  <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-                  <p class="card-text">
-                    ${product.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          `;
-  }
+  data.products.map((product) => showProduct(product));
 });
 const clear = document.getElementById("clearRangeFilter");
 clear.addEventListener("click", async function () {
@@ -223,8 +108,11 @@ clear.addEventListener("click", async function () {
   document.getElementById("rangeFilterCountMin").value = "";
   data = await fetchProducts();
   catName.textContent = data.catName;
-  data.products.map((product) => {
-    container.innerHTML += `
+  data.products.map((product) => showProduct(product));
+});
+
+function showProduct(product) {
+  container.innerHTML += `
     <div class="card mt-3 mx-auto">
       <div class="row g-0">
         <div class="col-md-4">
@@ -242,5 +130,4 @@ clear.addEventListener("click", async function () {
       </div>
     </div>
     `;
-  });
-});
+}
