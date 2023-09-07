@@ -1,6 +1,73 @@
+// Contenedor donde mostramos los productos y nombre de la categoría
 let container = document.getElementById("container");
 let catName = document.getElementById("catName");
-let data = {};
+
+const priceRangeForm = document.getElementById("priceRangeForm");
+const clearPriceRangeBtn = document.getElementById("clearRangeFilter");
+const sortAscBtn = document.getElementById("sortAsc");
+const sortDescBtn = document.getElementById("sortDesc");
+const sortSoldCountBtn = document.getElementById("sortByCount");
+const searchInp = document.getElementById("search");
+
+// Criterios
+const SortCriteria = {
+  ASC_BY_PRICE: "ASC",
+  DESC_BY_PRICE: "DESC",
+  BY_SOLD_COUNT: "Cant.",
+};
+
+let productsArray = [];
+let filteredProductsArr = [];
+
+document.addEventListener("DOMContentLoaded", async function () {
+  const productsResponse = await fetchProducts();
+
+  productsArray = productsResponse.products;
+  filteredProductsArr = productsArray;
+
+  showProductsList();
+
+  // Ponemos el nombre de la categoría según lo que nos devuelve la API
+  catName.textContent = productsResponse.catName;
+
+  // Definimos los enventos click en los botones para ordenar los productos
+  sortAscBtn.addEventListener("click", () =>
+    sortProducts(SortCriteria.ASC_BY_PRICE)
+  );
+
+  sortDescBtn.addEventListener("click", () =>
+    sortProducts(SortCriteria.DESC_BY_PRICE)
+  );
+
+  sortSoldCountBtn.addEventListener("click", () =>
+    sortProducts(SortCriteria.BY_SOLD_COUNT)
+  );
+
+  // Definimos el evento input para la barra de búsqueda y filtramos según el valor ingresado
+  searchInp.addEventListener("input", (event) => {
+    const { value } = event.target;
+    filterProductsByTerm(value.trim());
+  });
+
+  // Definimos el evento al enviar el formulario filtra según el rango de precio definido
+  priceRangeForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    let [minPrice, maxPrice] = event.target;
+    minPrice = parseFloat(minPrice.value);
+    maxPrice = parseFloat(maxPrice.value);
+    if (!isNaN(minPrice) || !isNaN(maxPrice)) {
+      filterProductsByPrice(minPrice, maxPrice);
+    }
+  });
+
+  // Definimo
+  clearPriceRangeBtn.addEventListener("click", () => {
+    document.getElementById("priceRangeMin").value = "";
+    document.getElementById("priceRangeMax").value = "";
+    filteredProductsArr = productsArray;
+    showProductsList();
+  });
+});
 
 // Función que trae los productos según la id de la categoría
 async function fetchProducts() {
@@ -12,105 +79,52 @@ async function fetchProducts() {
     const response = await fetch(
       `https://japceibal.github.io/emercado-api/cats_products/${catID}.json`
     );
+    // Si la respuesta es distinto de ok lanzamos un error
+    if (!response.ok) throw new Error("Error al traer los datos");
     const data = await response.json();
     // En caso de que todo salga bien, retornamos la respuesta de la API
     return data;
   } catch (error) {
     // Si al traer los datos hay algún error lo mostramos por consola
-    console.error(error);
+    console.error("Ocurrio un error: ", error);
   }
 }
 
-document.addEventListener("DOMContentLoaded", async function () {
-  // Le asignamos a data la respuesta de la API
-  data = await fetchProducts();
-  // Ponemos el nombre de la categoría según lo que nos devuelve la API
-  catName.textContent = data.catName;
+// Función que ordena los productos según el criterio que le pasamos por parámetro
+function sortProducts(sortCriteria) {
+  switch (sortCriteria) {
+    case SortCriteria.ASC_BY_PRICE:
+      result = filteredProductsArr.sort((a, b) => a.cost - b.cost);
+      break;
 
-  // Traemos el buscador
-  const buscador = document.getElementById("buscador");
+    case SortCriteria.DESC_BY_PRICE:
+      result = filteredProductsArr.sort((a, b) => b.cost - a.cost);
+      break;
 
-  buscador.addEventListener("input", function () {
-    // Se obtiene lo que el usuario escribe y se pasa a minúsculas
-    const busquedaUser = buscador.value.toLowerCase();
+    case SortCriteria.BY_SOLD_COUNT:
+      result = filteredProductsArr.sort((a, b) => b.soldCount - a.soldCount);
+      break;
 
-    // Buscamos en el nombre y la descripcion lo que se ingresa en el bucador
-    const productosFiltrados = data.products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(busquedaUser) ||
-        product.description.toLowerCase().includes(busquedaUser)
-    );
-
-    // Limpia los productos anteriores
-    container.innerHTML = "";
-
-    // Se modifico esta parte para que muestre los productos filtrados
-    productosFiltrados.map((product) => showProduct(product));
-  });
-
-  // Mostrar todos los productos al cargar la página
-
-  data = await fetchProducts();
-  catName.textContent = data.catName;
-  data.products.map((product) => showProduct(product));
-});
-
-async function filterRange() {
-  data = await fetchProducts();
-  const max = document.getElementById("rangeFilterCountMax").value;
-  const min = document.getElementById("rangeFilterCountMin").value;
-  // Filtramos los productos según los rangos definidos
-  const filterProducts = data.products.filter((product) => {
-    // Si no se define un máximo solo se buscan productos mayores o iguales al costo mínimo definido
-    if (!max) {
-      return product.cost >= min;
-    }
-    // Si se define mínimo y máximo se buscan productos que tengas el costo entre el mínimo y el máximo definidos
-    return product.cost >= min && product.cost <= max;
-  });
-  // Por defecto si no se define máximo ni mínimo retornamos todos los productos
-  return filterProducts;
+    default:
+      break;
+  }
+  showProductsList();
 }
-const filter = document.getElementById("rangeFilterCount");
-filter.addEventListener("click", async () => {
-  container.innerHTML = "";
-  data = await filterRange();
-  console.log(data);
-  data.map((product) => showProduct(product));
-});
-const up = document.getElementById("sortAsc");
-up.addEventListener("click", async () => {
-  data = await fetchProducts();
-  const save = data.products.sort((a, b) => a.cost - b.cost);
-  data.products = save;
-  container.innerHTML = "";
-  data.products.map((product) => showProduct(product));
-});
-const down = document.getElementById("sortDesc");
-down.addEventListener("click", async () => {
-  data = await fetchProducts();
-  const save = data.products.sort((a, b) => b.cost - a.cost);
-  data.products = save;
-  container.innerHTML = "";
-  data.products.map((product) => showProduct(product));
-});
-const sold = document.getElementById("sortByCount");
-sold.addEventListener("click", async () => {
-  data = await fetchProducts();
-  const save = data.products.sort((a, b) => b.soldCount - a.soldCount);
-  data.products = save;
-  container.innerHTML = "";
-  data.products.map((product) => showProduct(product));
-});
-const clear = document.getElementById("clearRangeFilter");
-clear.addEventListener("click", async function () {
-  document.getElementById("rangeFilterCountMax").value = "";
-  document.getElementById("rangeFilterCountMin").value = "";
-  data = await fetchProducts();
-  catName.textContent = data.catName;
-  data.products.map((product) => showProduct(product));
-});
 
+// Función que recorre un array de productos y los agrega a la lista de productos, si no hay ninguno muestra un mensaje
+function showProductsList() {
+  container.innerHTML = "";
+  if (filteredProductsArr.length === 0) {
+    container.innerHTML = "<p>No se encontraron productos.</p>";
+    return;
+  }
+  container.innerHTML += `
+    <p class="text-muted">Cantidad de productos encontrados: ${filteredProductsArr.length}</p>
+  `;
+  filteredProductsArr.forEach((product) => showProduct(product));
+}
+
+// Función que sirve para estructurar un producto
 function showProduct(product) {
   container.innerHTML += `
     <div class="card mt-3 mx-auto">
@@ -120,8 +134,10 @@ function showProduct(product) {
         </div>
         <div class="col-md-8 p-2">
           <div class="card-body">
-          <small class="position-absolute top-0 end-0 p-4">${product.soldCount} vendidos</small>
-            <h5 class="card-title">${product.name} - ${product.currency} ${product.cost}</h5>
+            <div class="d-flex">
+              <h5 class="w-100 px-2 card-title">${product.name} - ${product.currency} ${product.cost}</h5>
+              <small class="flex-shrink-1 px-2">${product.soldCount} vendidos</small>
+            </div>
             <p class="card-text">
               ${product.description}
             </p>
@@ -130,4 +146,35 @@ function showProduct(product) {
       </div>
     </div>
     `;
+}
+
+// Filtra los productos según el nombre o la descripción del producto y lo muestra en la lista de productos
+function filterProductsByTerm(searchTerm) {
+  searchTerm = searchTerm.toLowerCase();
+
+  filteredProductsArr = productsArray.filter((product) => {
+    const productName = product.name.toLowerCase();
+    const productDescription = product.description.toLowerCase();
+    return (
+      productName.includes(searchTerm) ||
+      productDescription.includes(searchTerm)
+    );
+  });
+
+  showProductsList();
+}
+
+// Filtra productos según su precio y muestra la lista de productos filtrados
+function filterProductsByPrice(minPrice, maxPrice) {
+  filteredProductsArr = productsArray.filter((product) => {
+    if (!minPrice) {
+      return product.cost <= maxPrice;
+    }
+    if (!maxPrice) {
+      return product.cost >= minPrice;
+    }
+    return product.cost >= minPrice && product.cost <= maxPrice;
+  });
+
+  showProductsList();
 }

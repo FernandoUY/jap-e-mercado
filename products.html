@@ -78,7 +78,7 @@
         ></span>
         <input
           type="search"
-          id="buscador"
+          id="search"
           class="form-control"
           placeholder="Buscar productos..."
         />
@@ -121,40 +121,27 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-6 offset-lg-6 col-md-12 mb-1 container">
-          <div class="row container p-0 m-0">
-            <div class="col">
-              <p class="font-weight-normal text-end my-2">Cant.</p>
-            </div>
-            <div class="col">
-              <input
-                class="form-control"
-                type="number"
-                placeholder="min."
-                id="rangeFilterCountMin"
-              />
-            </div>
-            <div class="col">
-              <input
-                class="form-control"
-                type="number"
-                placeholder="max."
-                id="rangeFilterCountMax"
-              />
-            </div>
-            <div class="col-3 p-0">
-              <div class="btn-group" role="group">
-                <button class="btn btn-light btn-block" id="rangeFilterCount">
-                  Filtrar
-                </button>
-                <button class="btn btn-link btn-sm" id="clearRangeFilter">
-                  Limpiar
-                </button>
-              </div>
-            </div>
+      <div class="row justify-content-end">
+        <form id="priceRangeForm" class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input
+              class="form-control"
+              type="number"
+              placeholder="min."
+              id="priceRangeMin"
+            />
+            <input
+              class="form-control"
+              type="number"
+              placeholder="max."
+              id="priceRangeMax"
+            />
+
+            <button class="btn btn-light" id="rangeFilterCount">Filtrar</button>
+            <button class="btn btn-light" id="clearRangeFilter">Limpiar</button>
           </div>
-        </div>
+        </form>
       </div>
       <div id="container" class="container">
         <!-- This container is where cars are rendered -->
