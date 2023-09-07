@@ -111,43 +111,6 @@ function sortProducts(sortCriteria) {
   showProductsList();
 }
 
-// Función que recorre un array de productos y los agrega a la lista de productos, si no hay ninguno muestra un mensaje
-function showProductsList() {
-  container.innerHTML = "";
-  if (filteredProductsArr.length === 0) {
-    container.innerHTML = "<p>No se encontraron productos.</p>";
-    return;
-  }
-  container.innerHTML += `
-    <p class="text-muted">Cantidad de productos encontrados: ${filteredProductsArr.length}</p>
-  `;
-  filteredProductsArr.forEach((product) => showProduct(product));
-}
-
-// Función que sirve para estructurar un producto
-function showProduct(product) {
-  container.innerHTML += `
-    <div class="card mt-3 mx-auto">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
-        </div>
-        <div class="col-md-8 p-2">
-          <div class="card-body">
-            <div class="d-flex">
-              <h5 class="w-100 px-2 card-title">${product.name} - ${product.currency} ${product.cost}</h5>
-              <small class="flex-shrink-1 px-2">${product.soldCount} vendidos</small>
-            </div>
-            <p class="card-text">
-              ${product.description}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    `;
-}
-
 // Filtra los productos según el nombre o la descripción del producto y lo muestra en la lista de productos
 function filterProductsByTerm(searchTerm) {
   searchTerm = searchTerm.toLowerCase();
@@ -177,4 +140,47 @@ function filterProductsByPrice(minPrice, maxPrice) {
   });
 
   showProductsList();
+}
+
+// Función que recorre un array de productos y los agrega a la lista de productos, si no hay ninguno muestra un mensaje
+function showProductsList() {
+  container.innerHTML = "";
+  if (filteredProductsArr.length === 0) {
+    container.innerHTML = "<p>No se encontraron productos.</p>";
+    return;
+  }
+  container.innerHTML += `
+    <p class="text-muted">Cantidad de productos encontrados: ${filteredProductsArr.length}</p>
+  `;
+  filteredProductsArr.forEach((product) => showProduct(product));
+}
+
+// Función que sirve para estructurar un producto
+function showProduct(product) {
+  container.innerHTML += `
+    <div onclick=setProductId(${product.id}) class="card mt-3 mx-auto list-group list-group-item-action cursor-active">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src=${product.image} class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.name}" />
+        </div>
+        <div class="col-md-8 p-2">
+          <div class="card-body">
+            <div class="d-flex">
+              <h5 class="w-100 px-2 card-title">${product.name} - ${product.currency} ${product.cost}</h5>
+              <small class="flex-shrink-1 px-2">${product.soldCount} vendidos</small>
+            </div>
+            <p class="card-text">
+              ${product.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+}
+
+// Función que guarda la id del producto en localStorage y redirige a la pagina de información de producto
+function setProductId(id) {
+  localStorage.setItem("productId", id);
+  window.location = "product-info.html";
 }
