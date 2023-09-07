@@ -166,12 +166,13 @@ function showProduct(product) {
         <div class="col-md-8 p-2">
           <div class="card-body">
             <div class="d-flex">
-              <h5 class="w-100 px-2 card-title">${product.name} - ${product.currency} ${product.cost}</h5>
+              <h4 class="w-100 px-2 card-title">${product.name}</h4>
               <small class="flex-shrink-1 px-2">${product.soldCount} vendidos</small>
             </div>
             <p class="card-text">
               ${product.description}
             </p>
+            <h5 class="text-end">Precio: ${product.currency} ${product.cost}</h5>
           </div>
         </div>
       </div>
