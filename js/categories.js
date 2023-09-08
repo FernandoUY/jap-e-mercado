@@ -106,16 +106,7 @@ function sortAndShowCategories(sortCriteria, categoriesArray) {
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
 document.addEventListener("DOMContentLoaded", function (e) {
-  if (!localStorage.getItem("token")) {
-    window.location.href = "login.html";
-  } else {
-    document.getElementById("dropdown").innerHTML += `
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item" href="/signout.html">Cerrar sesión</a></li>
-    </ul>
-    `;
-  }
-
+  console.log(currentCategoriesArray);
   getJSONData(CATEGORIES_URL).then(function (resultObj) {
     if (resultObj.status === "ok") {
       currentCategoriesArray = resultObj.data;

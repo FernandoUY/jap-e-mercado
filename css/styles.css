@@ -221,10 +221,4 @@ a.custom-card:hover {
   padding-top: 30px !important;
 }
 
-/* filtros */
-#filter-conteiner {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-}
+/*para poner la lupa en el buscador*/
