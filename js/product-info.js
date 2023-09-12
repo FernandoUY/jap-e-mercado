@@ -1,45 +1,40 @@
 // Buscamos la id del producto en localStorage
 const productID = localStorage.getItem("productId");
 
-// Función que trae la información del producto según la id del producto
-async function fetchProduct(productID) {
-  // Intentamos traer la respuesta de la API
-  try {
-    const response = await fetch(
-      `https://japceibal.github.io/emercado-api/products/${productID}.json`
-    );
-    // Si la respuesta es distinto de ok lanzamos un error
-    if (!response.ok) throw new Error("Error al traer los datos");
-    const data = await response.json();
-    // En caso de que todo salga bien, retornamos la respuesta de la API
-    return data;
-  } catch (error) {
-    // Si al traer los datos hay algún error lo mostramos por consola
-    console.error("Ocurrio un error: ", error);
-  }
-}
+  // Cuando carga la página asignamos la respuesta de los comentarios en una variable y mostramos los comentarios
+  document.addEventListener("DOMContentLoaded", async function() {
+    const comments = await fetchProductComments(productID);
+    showComments(comments)
+  })
 
 // Función para obtener los comentarios de un producto por su ID
-async function fetchProductComments(productID) {
-  try {
-    const response = await fetch(
-      `https://japceibal.github.io/emercado-api/products_comments/${productID}.json`
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Error al traer comentarios del producto ${productID}.`
-      );
+function fetchProductComments(productID) {
+  return getJSONData(`${PRODUCT_INFO_COMMENTS_URL}${productID}.json`).then(response => {
+    if (response.status === "ok") {
+      return response.data
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Ocurrió un error al obtener los comentarios: ", error);
-  }
+  })
 }
 
-document.addEventListener("DOMContentLoaded", async function () {
-  const product = await fetchProduct(productID);
-  const productComments = await fetchProductComments(productID);
-});
+//Mostrar los coemntarios en pantalla (de momento sin las estrellitas :(  )
+function showComments(comments){
+  const divCom = document.getElementById("comm");
+
+  comments.forEach(comment => {
+    divCom.innerHTML += 
+    `
+    <div class="list-group list-group-item-action flex-colum align-items-start">
+      <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">${comment.user}</h5>
+          <small>//aca iria las estrellas</small>
+        </div>
+        <p>${comment.description}</p>
+        <small>${comment.dateTime}</small>
+      </div>
+    </div>
+    `
+  });
+
+
+}
