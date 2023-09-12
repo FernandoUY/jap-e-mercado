@@ -48,3 +48,4 @@ async function fetchProductComments(productID) {
     return []; // Retorna una lista vacía en caso de error
   }
 }
+
