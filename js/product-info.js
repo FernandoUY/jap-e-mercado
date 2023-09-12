@@ -1,61 +1,38 @@
 // Buscamos la id del producto en localStorage
 const productID = localStorage.getItem("productId");
 
-
+  // Cuando carga la página asignamos la respuesta de los comentarios en una variable y mostramos los comentarios
   document.addEventListener("DOMContentLoaded", async function() {
-    const product = await fetchProduct();
-    console.log(product);
-
-    const comments = await fetchProductComments(product.id);
-    console.log("Comentarios del producto:", comments);
-  
-  SeeCom(comments)
+    const comments = await fetchProductComments(productID);
+    showComments(comments)
   })
 
-
-
-
 // Función para obtener los comentarios de un producto por su ID
-async function fetchProductComments(productID) {
-  try {
-    const response = await fetch(
-      `https://japceibal.github.io/emercado-api/products_comments/${productID}.json`
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `Error al traer comentarios del producto ${productID}.`
-      );
+function fetchProductComments(productID) {
+  return getJSONData(`${PRODUCT_INFO_COMMENTS_URL}${productID}.json`).then(response => {
+    if (response.status === "ok") {
+      return response.data
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Ocurrió un error al obtener los comentarios: ", error);
-  }
+  })
 }
 
-
 //Mostrar los coemntarios en pantalla (de momento sin las estrellitas :(  )
-
-
-function SeeCom(DataComm){
-
+function showComments(comments){
   const divCom = document.getElementById("comm");
 
-  DataComm.forEach(element => {
+  comments.forEach(comment => {
     divCom.innerHTML += 
     `
-    <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">${element.user}</h5>
-      <small>//aca iria las estrellas</small>
+    <div class="list-group list-group-item-action flex-colum align-items-start">
+      <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">${comment.user}</h5>
+          <small>//aca iria las estrellas</small>
+        </div>
+        <p>${comment.description}</p>
+        <small>${comment.dateTime}</small>
+      </div>
     </div>
-    <p> ${element.description} </p>
-    <small>${element.dateTime}</small>
-    </a>
-    
     `
   });
 
