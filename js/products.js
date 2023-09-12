@@ -16,19 +16,22 @@ const SortCriteria = {
   BY_SOLD_COUNT: "Cant.",
 };
 
+// Traemos la id de la categoría desde localStorage
+const catID = localStorage.getItem("catID");
+
 let productsArray = [];
 let filteredProductsArr = [];
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const productsResponse = await fetchProducts();
+  const products = await fetchProductsFromCategoryID(catID);
 
-  productsArray = productsResponse.products;
+  productsArray = products.products;
   filteredProductsArr = productsArray;
 
   showProductsList();
 
   // Ponemos el nombre de la categoría según lo que nos devuelve la API
-  catName.textContent = productsResponse.catName;
+  catName.textContent = products.catName;
 
   // Definimos los enventos click en los botones para ordenar los productos
   sortAscBtn.addEventListener("click", () =>
@@ -70,23 +73,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 // Función que trae los productos según la id de la categoría
-async function fetchProducts() {
-  // Buscamos la id de la categoría en localStorage
-  const catID = localStorage.getItem("catID");
-
-  // Intentamos traer la respuesta de la API
-  try {
-    const response = await fetch(
-      `https://japceibal.github.io/emercado-api/cats_products/${catID}.json`
-    );
-    // Si la respuesta es distinto de ok lanzamos un error
-    if (!response.ok) throw new Error("Error al traer los datos");
-    const data = await response.json();
-    // En caso de que todo salga bien, retornamos la respuesta de la API
-    return data;
-  } catch (error) {
-    // Si al traer los datos hay algún error lo mostramos por consola
-    console.error("Ocurrio un error: ", error);
+async function fetchProductsFromCategoryID(categoryID) {
+  const response = await getJSONData(`${PRODUCTS_URL}${categoryID}.json`)
+  if (response.status === "ok") {
+    return response.data
   }
 }
 
