@@ -19,18 +19,19 @@ async function fetchProduct() {
     }
   }
 
+
   document.addEventListener("DOMContentLoaded", async function() {
     const product = await fetchProduct();
     console.log(product);
 
-  if (product && product.id) {
-    // Llama a la función para obtener los comentarios del producto
     const comments = await fetchProductComments(product.id);
     console.log("Comentarios del producto:", comments);
-  } else {
-    console.error("No se pudo obtener el producto o el ID del producto es inválido.");
-  }
-});
+  
+  SeeCom(comments)
+  })
+
+
+
 
 // Función para obtener los comentarios de un producto por su ID
 async function fetchProductComments(productID) {
@@ -49,3 +50,29 @@ async function fetchProductComments(productID) {
   }
 }
 
+
+//Mostrar los coemntarios en pantalla (de momento sin las estrellitas :(  )
+
+
+function SeeCom(DataComm){
+
+  const divCom = document.getElementById("comm");
+
+  DataComm.forEach(element => {
+    divCom.innerHTML += 
+    `
+    <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">${element.user}</h5>
+      <small>//aca iria las estrellas</small>
+    </div>
+    <p> ${element.description} </p>
+    <small>${element.dateTime}</small>
+    </a>
+    
+    `
+  });
+
+
+}
