@@ -56,10 +56,47 @@ function showProductInfo(product) {
   const infoSectionDiv = document.getElementById("info-section");
 
   infoSectionDiv.innerHTML = `
-    <h1>${product.name}</h1>
-    <p>${product.description}</p>
-    <p>${product.currency} ${product.cost}</p>
-    <p>${product.category}</p>
-    <p>${product.soldCount} vendidos</p>
+    <div class="row">
+      <div class="col col-md-5">
+        <div id="carrouselProduct" class="carousel slide">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carrouselProduct" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Imagen 1"></button>
+            <button type="button" data-bs-target="#carrouselProduct" data-bs-slide-to="1" aria-label="Imagen 2"></button>
+            <button type="button" data-bs-target="#carrouselProduct" data-bs-slide-to="2" aria-label="Imagen 3"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="${product.images[0]}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="${product.images[1]}" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+              <img src="${product.images[2]}" class="d-block w-100" alt="...">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carrouselProduct" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carrouselProduct" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        </div>
+      </div>
+      <div class="col col-md-7 card-body">
+        <span class="text-muted">${product.category}</span>
+        <div class="d-flex justify-content-between">
+          <h3 class="card-title">${product.name}</h3>
+          <p><span class="badge bg-info">${product.soldCount} vendidos</span></p>
+        </div>
+        <p class="card-text">${product.description}</p>
+        <div class="row">
+          <div class="col"><span class="fw-bold">Precio: </span>${product.currency} ${product.cost}</div>
+          <div class="col"></div>
+        </div>
+      </div>
+    </div>
   `
 }
