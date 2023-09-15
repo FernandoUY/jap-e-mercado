@@ -100,3 +100,26 @@ function showProductInfo(product) {
     </div>
   `
 }
+// Función para agregar un comentario y mostrarlo en pantalla.
+
+let comentarios = document.getElementById("comments-section");
+
+let button = document.getElementById("comentar")
+
+button.addEventListener("click", () => {
+  let comentarios2 = document.getElementById("comentarios1").value
+  let div = document.createElement("div");
+  div.innerHTML =  `
+  <div class="list-group list-group-item-action flex-colum align-items-start">
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">usuario</h5>
+        <small>//aca iria las estrellas</small>
+      </div>
+      <p>${comentarios2}</p>
+      <small>tiempo</small>
+    </div>
+  </div>
+  `;
+  comentarios.appendChild(div);
+});
