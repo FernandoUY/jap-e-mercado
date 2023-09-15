@@ -72,7 +72,6 @@
           <!-- En este lugar se encuentra los comentarios y su lugar para crear un nuevo comentario-->
           <h2>Comentarios</h2>
           <div id="comments-section"></div>
-
           <form>
             <div class="mt-4">
               <h2>Comentar</h2>
@@ -86,16 +85,23 @@
               ></textarea>
               <div class="mb-3">
                 <label class="form-label">Calificación</label>
-                <select class="form-select">
-                  <option>0</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+                <!--tambien se agrega la parte de seleccion de calificacion de estrellas-->
+                <select class="form-select" id="rating-select">
+                  <option value="0">Seleccionar calificación...</option>
+                  <option value="1">1 estrella</option>
+                  <option value="2">2 estrellas</option>
+                  <option value="3">3 estrellas</option>
+                  <option value="4">4 estrellas</option>
+                  <option value="5">5 estrellas</option>
                 </select>
               </div>
-              <button class="btn btn-primary" type="button">Comentar</button>
+              <p>
+                Calificación seleccionada:
+                <span id="comment-rating-value">0</span>
+              </p>
+              <button class="btn btn-primary" type="button" id="comment-button">
+                Comentar
+              </button>
             </div>
           </form>
         </div>

@@ -4,9 +4,9 @@ const productID = localStorage.getItem("productId");
 // Cuando carga la página asignamos la respuesta de los comentarios en una variable y mostramos los comentarios
 document.addEventListener("DOMContentLoaded", async function () {
   const productComments = await fetchProductComments(productID);
-  const productInfo = await fetchProductInfo(productID)
+  const productInfo = await fetchProductInfo(productID);
   showProductComments(productComments);
-  showProductInfo(productInfo)
+  showProductInfo(productInfo);
 });
 
 // Función para obtener los detalles de un producti por su ID
@@ -27,7 +27,7 @@ async function fetchProductComments(productID) {
   }
 }
 
-//Mostrar los coemntarios en pantalla (de momento sin las estrellitas :(  )
+//Mostrar los coemntarios en pantalla (con las estrellas (problemas con que salgan color)  )
 function showProductComments(comments) {
   const commentsSectionDiv = document.getElementById("comments-section");
 
@@ -36,13 +36,14 @@ function showProductComments(comments) {
       <h4 class="text-muted">Aún no hay comentarios sobre este producto</h4>
     `;
   }
+  //agrego estrellas al comentario
   comments.forEach((comment) => {
     commentsSectionDiv.innerHTML += `
     <div class="list-group list-group-item-action flex-colum align-items-start">
       <div class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">${comment.user}</h5>
-          <small>//aca iria las estrellas</small>
+          <small>${generateStarRating(comment.rating)}</small>
         </div>
         <p>${comment.description}</p>
         <small>${comment.dateTime}</small>
@@ -50,6 +51,26 @@ function showProductComments(comments) {
     </div>
     `;
   });
+}
+//funcion para calificar Stars Rating
+function generateStarRating(rating) {
+  //escala de
+  const maxRating = 5;
+  //estrella color
+  const star = "⭐";
+  //estrella vacia
+  const emptyStar = "☆";
+  let starsHTML = "";
+
+  for (let i = 1; i <= maxRating; i++) {
+    if (i <= rating) {
+      starsHTML += star;
+    } else {
+      starsHTML += emptyStar;
+    }
+  }
+
+  return starsHTML;
 }
 
 function showProductInfo(product) {
@@ -98,5 +119,5 @@ function showProductInfo(product) {
         </div>
       </div>
     </div>
-  `
+  `;
 }
