@@ -1,16 +1,17 @@
 // Buscamos la id del producto en localStorage
+let productComments
 const productID = localStorage.getItem("productId");
 const NickUser = localStorage.getItem("user");
 
 // Cuando carga la página asignamos la respuesta de los comentarios en una variable y mostramos los comentarios
 document.addEventListener("DOMContentLoaded", async function () {
-  const productComments = await fetchProductComments(productID);
+  productComments = await fetchProductComments(productID);
   const productInfo = await fetchProductInfo(productID);
   showProductComments(productComments);
   showProductInfo(productInfo);
 });
 
-// Función para obtener los detalles de un producti por su ID
+// Función para obtener los detalles de un producto por su ID
 async function fetchProductInfo(productID) {
   const response = await getJSONData(`${PRODUCT_INFO_URL}${productID}.json`);
   if (response.status === "ok") {
@@ -59,9 +60,9 @@ function generateStarRating(rating) {
   //escala de
   const maxRating = 5;
   //estrella color
-  const star = "⭐";
+  const star = `<i class="fa fa-star checked"></i>`;
   //estrella vacia
-  const emptyStar = "☆";
+  const emptyStar = `<i class="fa fa-star"></i>`;
   let starsHTML = "";
 
   for (let i = 1; i <= maxRating; i++) {
@@ -131,14 +132,15 @@ let button = document.getElementById("comment-button")
 
 button.addEventListener("click", () => {
   let comentarios2 = document.getElementById("comentarios1").value
-  
+  let valorselect = document.getElementById("rating-select").value 
+
   let div = document.createElement("div");
   div.innerHTML =  `
   <div class="list-group list-group-item-action flex-colum align-items-start">
     <div class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">${NickUser}</h5>
-        <small>//aca iria las estrellas</small>
+        <small>${generateStarRating(valorselect)}</small>
       </div>
       <p>${comentarios2}</p>
       <small>${datecomm()}</small>
