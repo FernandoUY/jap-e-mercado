@@ -123,8 +123,6 @@ function showProductInfo(product) {
     </div>
   `;
 }
-<<<<<<< Updated upstream
-=======
 // Función para agregar un comentario y mostrarlo en pantalla.
 
 let comentarios = document.getElementById("comments-section");
@@ -157,4 +155,3 @@ function datecomm(){
   const fecha = new Date();
   return fecha.toLocaleString();
 }
->>>>>>> Stashed changes
