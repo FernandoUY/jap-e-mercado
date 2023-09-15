@@ -38,12 +38,13 @@ function showProductComments(comments) {
   }
   //agrego estrellas al comentario
   comments.forEach((comment) => {
+    console.log()
     commentsSectionDiv.innerHTML += `
     <div class="list-group list-group-item-action flex-colum align-items-start">
       <div class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">${comment.user}</h5>
-          <small>${generateStarRating(comment.rating)}</small>
+          <small>${generateStarRating(comment.score)}</small>
         </div>
         <p>${comment.description}</p>
         <small>${comment.dateTime}</small>
