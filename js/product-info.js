@@ -1,5 +1,6 @@
 // Buscamos la id del producto en localStorage
 const productID = localStorage.getItem("productId");
+const NickUser = localStorage.getItem("user");
 
 // Cuando carga la página asignamos la respuesta de los comentarios en una variable y mostramos los comentarios
 document.addEventListener("DOMContentLoaded", async function () {
@@ -99,4 +100,35 @@ function showProductInfo(product) {
       </div>
     </div>
   `
+}
+// Función para agregar un comentario y mostrarlo en pantalla.
+
+let comentarios = document.getElementById("comments-section");
+
+let button = document.getElementById("comentar")
+
+button.addEventListener("click", () => {
+  let comentarios2 = document.getElementById("comentarios1").value
+  
+  let div = document.createElement("div");
+  div.innerHTML =  `
+  <div class="list-group list-group-item-action flex-colum align-items-start">
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">${NickUser}</h5>
+        <small>//aca iria las estrellas</small>
+      </div>
+      <p>${comentarios2}</p>
+      <small>${datecomm()}</small>
+    </div>
+  </div>
+  `;
+  comentarios.appendChild(div);
+});
+
+
+//Para sacar el dia y hora para crear el nuevo comentario
+function datecomm(){
+  const fecha = new Date();
+  return fecha.toLocaleString();
 }
