@@ -136,7 +136,7 @@ function filterProductsByPrice(minPrice, maxPrice) {
 function showProductsList() {
   container.innerHTML = "";
   if (filteredProductsArr.length === 0) {
-    container.innerHTML = "<p>No se encontraron productos.</p>";
+    container.innerHTML = "<h3 class='mt-4 text-center'>No se encontraron productos.</h3>";
     return;
   }
   container.innerHTML += `
