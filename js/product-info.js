@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const productInfo = await fetchProductInfo(productID);
   showProductComments(productComments);
   showProductInfo(productInfo);
+  showRelatedProducts(productInfo.relatedProducts)
 });
 
 // Función para obtener los detalles de un producto por su ID
@@ -40,7 +41,7 @@ function showProductComments(comments) {
   }
   //agrego estrellas al comentario
   comments.forEach((comment) => {
-    console.log()
+
     commentsSectionDiv.innerHTML += `
     <div class="list-group list-group-item-action flex-colum align-items-start">
       <div class="list-group-item list-group-item-action flex-column align-items-start">
@@ -118,12 +119,26 @@ function showProductInfo(product) {
         <p class="card-text">${product.description}</p>
         <div class="row">
           <div class="col"><span class="fw-bold">Precio: </span>${product.currency} ${product.cost}</div>
-          <div class="col"></div>
         </div>
       </div>
     </div>
   `;
 }
+
+function showRelatedProducts(relatedProducts) {
+  let relatedProductsDiv = document.getElementById("related-products");
+
+  relatedProducts.forEach(relatedProduct => {
+    relatedProductsDiv.innerHTML += `
+    <div onclick=setProductId(${relatedProduct.id}) class="card cursor-active list-group list-group-item-action">
+      <img src="${relatedProduct.image}" class="card-img-top" alt="${relatedProduct.name}">
+      <div class="card-body">
+        <h5>${relatedProduct.name}</h5>
+      </div>
+    </div>`;
+  })
+}
+
 // Función para agregar un comentario y mostrarlo en pantalla.
 
 let comentarios = document.getElementById("comments-section");
@@ -155,4 +170,9 @@ button.addEventListener("click", () => {
 function datecomm(){
   const fecha = new Date();
   return fecha.toLocaleString();
+}
+
+function setProductId(id) {
+  localStorage.setItem("productId", id);
+  window.location = "product-info.html"
 }
