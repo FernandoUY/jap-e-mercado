@@ -294,7 +294,7 @@ a.custom-card:hover {
 /* modo dark */
 
 .darkweb{
-  background-color: #020202;
+  background-color: #020202ab;
   color: #fff;
 }
 
@@ -305,5 +305,6 @@ a.custom-card:hover {
 #divDark{
   background-color: #323232;
 }
+
 
 
