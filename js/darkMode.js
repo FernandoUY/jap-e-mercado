@@ -3,15 +3,17 @@ let bttDark = document.getElementById("darkchek")
 
 bttDark.addEventListener('change', function(){
 
-    var valuebtt = bttDark.value
-
     if(bttDark.checked){
         
         TemaMode("False", "white", "ligth", "album py-5 bg-light", "darkweb")
+
     }
     else{
+
         TemaMode("True", "dark", "darkweb", "album py-5", "ligth")
+
     }
+    
 })
 
 
@@ -48,7 +50,11 @@ function TemaMode(bool, color, tyClasBody, tyClasDiv, ClasBody){
     let  divdark = document.getElementById("divDark") 
 
     changeColorDiv(color)
-    divdark.className = tyClasDiv
+
+    if(divdark !== null){
+        divdark.className = tyClasDiv
+    }
+    
     clasBody.className = tyClasBody
 
 }
