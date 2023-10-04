@@ -1,60 +1,21 @@
-let bttDark = document.getElementById("darkchek")
+let bttDark = document.getElementById("darkcheck");
 
+document.addEventListener("DOMContentLoaded", () => {
+  // Si en el localStorage hay un item theme que tiene el string "dark" el estado del checkbox se pone como tildado
+  bttDark.checked = localStorage.getItem("theme") === "dark" ? true : false;
+  // Vemos si en el localStorage tenemos un item theme y según si tiene "dark" o "light" le ponemos ese valor al atributo de bootstrap data-bs-theme
+  document
+    .querySelector("html")
+    .setAttribute("data-bs-theme", localStorage.getItem("theme"));
 
-bttDark.addEventListener('change', function(){
-
-    if(bttDark.checked){
-        
-        TemaMode("False", "white", "ligth", "album py-5 bg-light", "darkweb")
-
+  // Agregamos un evento que escucha cuando cambiar el checkbox
+  bttDark.addEventListener("change", (event) => {
+    // Guardamos en el item theme dependiendo de si el btn está checked guardamos "dark" y si no esta checked guardamos "light"
+    localStorage.setItem("theme", event.target.checked ? "dark" : "light");
+    if (localStorage.getItem("theme") === "dark" && event.target.checked) {
+      document.querySelector("html").setAttribute("data-bs-theme", "dark");
+    } else {
+      document.querySelector("html").setAttribute("data-bs-theme", "light");
     }
-    else{
-
-        TemaMode("True", "dark", "darkweb", "album py-5", "ligth")
-
-    }
-    
-})
-
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    let valorDark = localStorage.getItem("dark")
-
-    if(valorDark == "True"){
-        TemaMode("True", "dark", "darkweb", "album py-5", "ligth")
-    }else{
-        TemaMode("False", "white", "ligth", "album py-5 bg-light", "darkweb")
-    }
-    
-
-
-})
-
-
-function changeColorDiv(color){
-    let divCard = document.getElementsByClassName("card mb-4 shadow-sm custom-card cursor-active")
-
-    
-    for (let index = 0; index < divCard.length; index++) {
-        
-        divCard[index].className = `card mb-4 shadow-sm custom-card cursor-active bg-${color}`
-    }
-
-}
-
-
-function TemaMode(bool, color, tyClasBody, tyClasDiv, ClasBody){
-    localStorage.setItem("dark", bool)
-    let clasBody = document.getElementsByClassName(ClasBody)[0]
-    let  divdark = document.getElementById("divDark") 
-
-    changeColorDiv(color)
-
-    if(divdark !== null){
-        divdark.className = tyClasDiv
-    }
-    
-    clasBody.className = tyClasBody
-
-}
+  });
+});
