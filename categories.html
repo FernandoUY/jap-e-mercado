@@ -126,35 +126,32 @@
             </div>
           </div>
         </div>
-        <div class="row row-cols-1 row-cols-sm-3 justify-content-end">
-          <div class="col">
-            <p class="font-weight-normal text-end my-2">Cant.</p>
+        <div class="row row-cols-1 justify-content-end mb-2">
+          <div class="col-auto">
+            <div class="input-group">
+              <span class="input-group-text">Cant.</span>
+              <input
+                class="form-control"
+                type="number"
+                placeholder="min."
+                id="rangeFilterCountMin"
+              />
+              <input
+                class="form-control"
+                type="number"
+                placeholder="máx."
+                id="rangeFilterCountMax"
+              />
+            </div>
           </div>
-          <div class="col-6 col-sm-4">
-            <input
-              class="form-control"
-              type="number"
-              placeholder="min."
-              id="rangeFilterCountMin"
-            />
-          </div>
-          <div class="col-6 col-sm-4">
-            <input
-              class="form-control"
-              type="number"
-              placeholder="máx."
-              id="rangeFilterCountMax"
-            />
-          </div>
-          <div class="col-6 col-sm-3 my-2">
+          <div class="col-auto mt-2 mt-md-0">
             <div class="btn-group" role="group">
-              <button class="btn btn-primary" id="rangeFilterCount">
-                Filtrar
-              </button>
+              <button class="btn" id="rangeFilterCount">Filtrar</button>
               <button class="btn" id="clearRangeFilter">Limpiar</button>
             </div>
           </div>
         </div>
+
         <div class="row">
           <div class="list-group" id="cat-list-container">
             <!-- Show list of categories -->
