@@ -1,4 +1,4 @@
-const currency = "$"; 
+const currency = "USD"; 
 document.addEventListener("DOMContentLoaded", async () => {
   const { data } = await getJSONData(CART_INFO_URL + "25801.json");
   showProductRow(data.articles);
