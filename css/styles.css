@@ -289,3 +289,8 @@ a.custom-card:hover {
   box-shadow: 0px 0px var(--main-color);
   transform: translate(3px, 3px);
 }
+
+.large-label {
+  font-size: 24px;
+  margin-bottom: 10px;
+}

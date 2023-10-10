@@ -98,6 +98,52 @@
         </table>
         <hr />
       </div>
+      <div class="container">
+        <form>
+          <div class="form-group">
+            <label for="tipo-envio" class="large-label">Tipo de envío</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="premium" name="tipo-envio" value="premium">
+              <label class="form-check-label" for="premium">Premium 2 a 5 días (15%)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="express" name="tipo-envio" value="express">
+              <label class="form-check-label" for="express">Express 5 a 8 días (7%)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="normal" name="tipo-envio" value="normal">
+              <label class="form-check-label" for="normal">Standard 12 a 15 días (5%)</label>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="direccion-envio" class="large-label">Dirección de envío</label>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="calle">Calle</label>
+                        <input type="text" class="form-control" id="calle" name="calle">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="numero">Número</label>
+                        <input type="text" class="form-control" id="numero" name="numero">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="esquina">Esquina</label>
+                        <input type="text" class="form-control" id="esquina" name="esquina">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <hr /> 
     </main>
     <footer class="text-muted">
       <div class="container">
