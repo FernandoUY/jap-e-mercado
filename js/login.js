@@ -8,8 +8,11 @@ const token = () => {
 
 document.addEventListener("submit", function () {
   const emailValue = document.getElementById("emailInput").value //se obtiene el valor del email
+
+  let emailValueUser = emailValue.slice(0, -10)
+
   localStorage.setItem("token", token());
-  localStorage.setItem("user", emailValue);
+  localStorage.setItem("user", emailValueUser);
 });
 
 
