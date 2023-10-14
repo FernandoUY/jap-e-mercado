@@ -1,5 +1,5 @@
 // Buscamos la id del producto en localStorage
-let productComments
+let productComments;
 const productID = localStorage.getItem("productId");
 const NickUser = localStorage.getItem("user");
 
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const productInfo = await fetchProductInfo(productID);
   showProductComments(productComments);
   showProductInfo(productInfo);
-  showRelatedProducts(productInfo.relatedProducts)
+  showRelatedProducts(productInfo.relatedProducts);
 });
 
 // Función para obtener los detalles de un producto por su ID
@@ -41,7 +41,6 @@ function showProductComments(comments) {
   }
   //agrego estrellas al comentario
   comments.forEach((comment) => {
-
     commentsSectionDiv.innerHTML += `
     <div class="list-group list-group-item-action flex-colum align-items-start">
       <div class="list-group-item list-group-item-action flex-column align-items-start">
@@ -119,16 +118,37 @@ function showProductInfo(product) {
         <p class="card-text">${product.description}</p>
         <div class="row">
           <div class="col"><span class="fw-bold">Precio: </span>${product.currency} ${product.cost}</div>
+          <div class="col"><button class="btn btn-primary">Agregar al carrito</button</div>
         </div>
       </div>
     </div>
   `;
+
+  const addToCart = document.querySelector(".btn.btn-primary");
+  addToCart.addEventListener("click", () => {
+    const count = 1;
+    const { id, name, cost, currency, images  } = product;
+    const cartProduct = {
+      id,
+      name,
+      count,
+      unitCost: cost,
+      currency,
+      image: images[0]
+    }
+    const user = localStorage.getItem("user")
+    const articles = JSON.parse(localStorage.getItem("userCart"))?.articles || [];
+    const isProductInCart = articles.some(article => article.id === id)
+    if (isProductInCart) return
+    articles.push(cartProduct);
+    localStorage.setItem("userCart", JSON.stringify({user, articles}))
+  });
 }
 
 function showRelatedProducts(relatedProducts) {
   let relatedProductsDiv = document.getElementById("related-products");
 
-  relatedProducts.forEach(relatedProduct => {
+  relatedProducts.forEach((relatedProduct) => {
     relatedProductsDiv.innerHTML += `
     <div onclick=setProductId(${relatedProduct.id}) class="card cursor-active list-group list-group-item-action">
       <img src="${relatedProduct.image}" class="card-img-top" alt="${relatedProduct.name}">
@@ -136,21 +156,21 @@ function showRelatedProducts(relatedProducts) {
         <h5>${relatedProduct.name}</h5>
       </div>
     </div>`;
-  })
+  });
 }
 
 // Función para agregar un comentario y mostrarlo en pantalla.
 
 let comentarios = document.getElementById("comments-section");
 
-let button = document.getElementById("comment-button")
+let button = document.getElementById("comment-button");
 
 button.addEventListener("click", () => {
-  let comentarios2 = document.getElementById("comentarios1").value
-  let valorselect = document.getElementById("rating-select").value 
+  let comentarios2 = document.getElementById("comentarios1").value;
+  let valorselect = document.getElementById("rating-select").value;
 
   let div = document.createElement("div");
-  div.innerHTML =  `
+  div.innerHTML = `
   <div class="list-group list-group-item-action flex-colum align-items-start">
     <div class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
@@ -165,14 +185,13 @@ button.addEventListener("click", () => {
   comentarios.appendChild(div);
 });
 
-
 //Para sacar el dia y hora para crear el nuevo comentario
-function datecomm(){
+function datecomm() {
   const fecha = new Date();
   return fecha.toLocaleString();
 }
 
 function setProductId(id) {
   localStorage.setItem("productId", id);
-  window.location = "product-info.html"
+  window.location = "product-info.html";
 }
