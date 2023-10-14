@@ -1,7 +1,7 @@
 const currency = "USD";
 document.addEventListener("DOMContentLoaded", async () => {
   const { data } = await getJSONData(CART_INFO_URL + "25801.json");
-  const { articles } = JSON.parse(localStorage.getItem("userCart"));
+  const articles = JSON.parse(localStorage.getItem("userCart"))?.articles;
   showProductRow(data.articles);
   showProductRow(articles);
 
