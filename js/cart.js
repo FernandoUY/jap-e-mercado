@@ -1,12 +1,17 @@
+let articles = [];
 const currency = "USD";
+
 document.addEventListener("DOMContentLoaded", async () => {
-  const { data } = await getJSONData(CART_INFO_URL + "25801.json");
-  const articles = JSON.parse(localStorage.getItem("userCart"))?.articles;
-  showProductRow(data.articles);
+  // Realizamos una petición a la URL donde se encuentra el carrito de compras del usuario con id 25801 y guardamos data un una variable
+  const userCart = await getJSONData(CART_INFO_URL + "25801.json");
+  articles = userCart.data.articles;
+
+  getArticlesFromLocalStorage().forEach(article => articles.push(article))
+
   showProductRow(articles);
 
   // se crea evento de cambio de cantidad
-  const quantityInputs = document.querySelectorAll(".quantity-input");
+  const quantityInputs = document.querySelectorAll("input[type='number']");
   quantityInputs.forEach((input) => {
     input.addEventListener("change", updateProductTotal);
   });
@@ -17,24 +22,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function showProductRow(products) {
   const tBody = document.querySelector(".table-group-divider");
+
+  tBody.innerHTML = ""
+
   products.forEach((product) => {
-    const { name, image, unitCost, count } = product;
+    const { id, name, image, unitCost, count } = product;
+    const subtotal = (unitCost * count).toFixed(2);
 
     tBody.innerHTML += `
     <tr>
       <th scope="row"><img src="${image}" class="d-none d-sm-block" width="128" /></th>
       <td>${name}</td>
-      <td class="unit-cost" data-unit-cost="${unitCost}">${currency} ${unitCost.toFixed(2)}</td>
+      <td class="unit-cost">${currency} ${unitCost.toFixed(2)}</td>
       <td class="col-1"><input type="number" class="form-control quantity-input" min="1" max="10" value="${count}" /></td>
-      <td class="subtotal">${currency} ${(unitCost * count).toFixed(2)}</td>
+      <td class="subtotal">${currency} ${subtotal}</td>
+      <td>
+        <button class="btn" onclick="deleteArticle(${id})">
+          <i class="fa fa-trash" style="color: red;"></i>
+        </button>
+      </td>
     </tr>
     `;
   });
 }
 
-function updateProductTotal() {
-  const productRows = document.querySelectorAll(".table-group-divider tr");
+function updateProductTotal(event) {
   let totalPrice = 0;
+  const productRows = document.querySelectorAll(".table-group-divider tr");
 
   productRows.forEach((row) => {
     const quantityInput = row.querySelector(".quantity-input");
@@ -42,14 +56,12 @@ function updateProductTotal() {
     const subtotalCell = row.querySelector(".subtotal");
 
     const quantity = parseInt(quantityInput.value);
-
-    // se comprueba que unitCostCell es válido antes de acceder a dataset
-    if (unitCostCell) {
-      const unitCost = parseFloat(unitCostCell.dataset.unitCost);
-      const subtotal = quantity * unitCost;
-      subtotalCell.textContent = `${currency} ${subtotal.toFixed(2)}`;
-      totalPrice += subtotal;
-    }
+    const unitCost = parseFloat(
+      unitCostCell.textContent.split("USD")[1].trim()
+    );
+    const subtotal = quantity * unitCost;
+    subtotalCell.textContent = `${currency} ${subtotal.toFixed(2)}`;
+    totalPrice += subtotal;
   });
 
   // se actualiza el precio total general
@@ -74,25 +86,21 @@ function calculateTotalPrice() {
   totalGeneral.textContent = `${currency} ${totalPrice.toFixed(2)}`;
 }
 
-function showCartProducts() {
-  const productsArr = JSON.parse(localStorage.getItem("userCart"));
-  const tBody = document.querySelector(".table-group-divider");
+function getArticlesFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("userCart"))?.articles || []
+}
 
-  productsArr.forEach((product) => {
-    tBody.innerHTML += `
-    <tr>
-      <th scope="row"><img src="${
-        product.image
-      }" class="d-none d-sm-block" width="128" /></th>
-      <td>${product.name}</td>
-      <td class="unit-cost" data-unit-cost="${product.cost}">${
-      product.currency
-    } ${product.cost.toFixed(2)}</td>
-      <td class="col-1"><input type="number" class="form-control quantity-input" min="1" max="10" value="4" /></td>
-      <td class="subtotal">${product.currency} ${(
-      product.cost * product.count
-    ).toFixed(2)}</td>
-    </tr>
-    `;
+function addArticlesToLocalStorage() {
+  localStorage.setItem("userCart", JSON.stringify(articles));
+}
+
+function deleteArticle(id) {
+  articles = articles.filter(article => article.id !== id)
+  showProductRow(articles)
+  const quantityInputs = document.querySelectorAll("input[type='number']");
+  quantityInputs.forEach((input) => {
+    input.addEventListener("change", updateProductTotal);
   });
+  calculateTotalPrice()
+  addArticlesToLocalStorage()
 }
