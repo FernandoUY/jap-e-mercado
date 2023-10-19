@@ -104,3 +104,30 @@ function deleteArticle(id) {
   calculateTotalPrice()
   addArticlesToLocalStorage()
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    let paymentMethodRadios = document.querySelectorAll('input[name="paymentMethod"]');
+    let cardNumberInput = document.getElementById('cardNumber');
+    let securityCodeInput = document.getElementById('securityCode');
+    let expirationDateInput = document.getElementById('expirationDate');
+    let accountNumberInput = document.getElementById('accountNumber');
+
+    // Función para habilitar o deshabilitar campos según la selección
+    function toggleFields() {
+        if (paymentMethodRadios[0].checked) {
+            cardNumberInput.disabled = false;
+            securityCodeInput.disabled = false;
+            expirationDateInput.disabled = false;
+            accountNumberInput.disabled = true;
+        } else if (paymentMethodRadios[1].checked) {
+            cardNumberInput.disabled = true;
+            securityCodeInput.disabled = true;
+            expirationDateInput.disabled = true;
+            accountNumberInput.disabled = false;
+        }
+    }
+
+    // Escuchar cambios en la opción de forma de pago
+    paymentMethodRadios.forEach(function (radio) {
+        radio.addEventListener('change', toggleFields);
+    })})

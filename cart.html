@@ -151,7 +151,69 @@
         </div>
     </form>
     </div>
-    <hr /> 
+    <hr />
+    <div class="container">
+      <div class="Forma-pago">
+          <label for="Forma-pago" class="large-label">Forma de pago</label>
+          <p>No ha seleccionado <a href="#" class="custom-select-link" data-bs-toggle="modal" data-bs-target="#paymentModal">Seleccionar</a></p>
+          <!-- Contenido del modal -->
+          <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="paymentModalLabel">Forma de pago</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form>
+                              <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard">
+                                  <label class="form-check-label" for="creditCard">Tarjeta de crédito</label>
+                                  <hr>
+                                  <div class="form-group">
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label for="cardNumber">Número de Tarjeta</label>
+                                              <input type="text" class="form-control" id="cardNumber" name="cardNumber">
+                                          </div>
+                                          <div class="col-md-4">
+                                              <label for="securityCode">Código de Seg.</label>
+                                              <input type="text" class="form-control" id="securityCode" name="securityCode">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <br>
+                                  <div class="row">
+                                      <div class="col-md-6">
+                                          <label for="expirationDate">Vencimiento (MM/AA)</label>
+                                          <input type="text" class="form-control" id="expirationDate" name="expirationDate">
+                                      </div>
+                                  </div>
+                              </div>
+                              <br>
+                              <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
+                                  <label class="form-check-label" for="bankTransfer">Transferencia Bancaria</label>
+                                  <hr>
+                                  <div class="form-group">
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label for="accountNumber">Número de Cuenta</label>
+                                              <input type="text" class="form-control" id="accountNumber" name="accountNumber">
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
     </main>
     <footer class="text-muted">
       <div class="container">
