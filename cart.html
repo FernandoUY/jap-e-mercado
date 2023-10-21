@@ -107,7 +107,7 @@
         <hr />
       </div>
       <div class="container">
-        <form>
+        <form class="row g-3 needs-validation" novalidate onsubmit="return false">
           <div class="form-group">
             <label for="tipo-envio" class="large-label">Tipo de envío</label>
             <div class="form-check">
@@ -129,35 +129,40 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="calle">Calle</label>
-                        <input type="text" class="form-control" id="calle" name="calle">
+                        <label for="validationCustom01" class="form-label">Calle</label>
+                        <input type="text" class="form-control" id="calle" name="calle" required>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="numero">Número</label>
-                        <input type="text" class="form-control" id="numero" name="numero">
+                        <label for="validationCustom01" class="form-label">Número</label>
+                        <input type="text" class="form-control" id="numero" name="numero" required>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="esquina">Esquina</label>
-                        <input type="text" class="form-control" id="esquina" name="esquina">
+                        <label for="validationCustom01" class="form-label">Esquina</label>
+                        <input type="text" class="form-control" id="esquina" name="esquina" required>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
     </div>
     <hr />
     <div class="container">
       <div class="Forma-pago">
           <label for="Forma-pago" class="large-label">Forma de pago</label>
           <p>No ha seleccionado <a href="#" class="custom-select-link" data-bs-toggle="modal" data-bs-target="#paymentModal">Seleccionar</a></p>
+<<<<<<< Updated upstream
 
           <button class="btn btn-outline-primary"  id="endBuy" >Finalizar Compra</button>
+=======
+          <div class="col-12">
+            <button  type="submit" class="btn btn-primary" id="BttSendCart" > Finalizar Compra </button>
+          </div>
+>>>>>>> Stashed changes
           <!-- Contenido del modal -->
           <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -169,39 +174,39 @@
                       <div class="modal-body">
                           <form>
                               <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard">
-                                  <label class="form-check-label" for="creditCard">Tarjeta de crédito</label>
+                                  <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" required>
+                                  <label for="validationCustom01" class="form-label">Tarjeta de crédito</label>
                                   <hr>
                                   <div class="form-group">
                                       <div class="row">
                                           <div class="col-md-6">
-                                              <label for="cardNumber">Número de Tarjeta</label>
-                                              <input type="text" class="form-control" id="cardNumber" name="cardNumber">
+                                              <label for="validationCustom01" class="form-label">Número de Tarjeta</label>
+                                              <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
                                           </div>
                                           <div class="col-md-4">
-                                              <label for="securityCode">Código de Seg.</label>
-                                              <input type="text" class="form-control" id="securityCode" name="securityCode">
+                                              <label for="validationCustom01" class="form-label">Código de Seg.</label>
+                                              <input type="text" class="form-control" id="securityCode" name="securityCode" required>
                                           </div>
                                       </div>
                                   </div>
                                   <br>
                                   <div class="row">
                                       <div class="col-md-6">
-                                          <label for="expirationDate">Vencimiento (MM/AA)</label>
-                                          <input type="text" class="form-control" id="expirationDate" name="expirationDate">
+                                          <label for="validationCustom01" class="form-label">Vencimiento (MM/AA)</label>
+                                          <input type="text" class="form-control" id="expirationDate" name="expirationDate" required>
                                       </div>
                                   </div>
                               </div>
                               <br>
                               <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer">
-                                  <label class="form-check-label" for="bankTransfer">Transferencia Bancaria</label>
+                                  <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bankTransfer" required>
+                                  <label for="validationCustom01" class="form-label">Transferencia Bancaria</label>
                                   <hr>
                                   <div class="form-group">
                                       <div class="row">
                                           <div class="col-md-6">
-                                              <label for="accountNumber">Número de Cuenta</label>
-                                              <input type="text" class="form-control" id="accountNumber" name="accountNumber">
+                                              <label for="validationCustom01" class="form-label">Número de Cuenta</label>
+                                              <input type="text" class="form-control" id="accountNumber" name="accountNumber" required>
                                           </div>
                                       </div>
                                   </div>
@@ -217,7 +222,9 @@
                   </div>
               </div>
           </div>
+        </form>
       </div>
+
   </div>
     </main>
     <footer class="text-muted">
@@ -246,5 +253,6 @@
     <script src="js/cart.js"></script>
     <script src="js/validacion.js"></script>
     <script src="js/darkMode.js"></script>
+    <script src="js/ValidacionesCart.js"></script>
   </body>
 </html>
