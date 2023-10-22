@@ -119,11 +119,24 @@ document.addEventListener('DOMContentLoaded', function () {
             securityCodeInput.disabled = false;
             expirationDateInput.disabled = false;
             accountNumberInput.disabled = true;
+
+            cardNumberInput.setAttribute("required", "")
+            securityCodeInput.setAttribute("required", "")
+            expirationDateInput.setAttribute("required", "")
+
+            accountNumberInput.removeAttribute("required", "")
+        
         } else if (paymentMethodRadios[1].checked) {
             cardNumberInput.disabled = true;
             securityCodeInput.disabled = true;
             expirationDateInput.disabled = true;
             accountNumberInput.disabled = false;
+
+            cardNumberInput.removeAttribute("required", "")
+            securityCodeInput.removeAttribute("required", "")
+            expirationDateInput.removeAttribute("required", "")
+
+            accountNumberInput.setAttribute("required", "")
         }
     }
 
@@ -131,17 +144,4 @@ document.addEventListener('DOMContentLoaded', function () {
     paymentMethodRadios.forEach(function (radio) {
         radio.addEventListener('change', toggleFields);
     })})
-
-
-    //VALIDACIONM CARRITO logre que se hiciera la verificacion en solo el form de 
-
-    // Obtener todos los formularios a los que queremos aplicar estilos de validación de Bootstrap personalizados
-    var forms = document.querySelectorAll('.needs-validation')
-      
-    // Bucle sobre ellos y evitar el envío
-      forms.forEach(function (form) {
-        console.log("sexo")
-        form.addEventListener('submit', function () {
-          form.classList.add('was-validated')
-        })
-      })
+    
