@@ -107,20 +107,17 @@
         <hr />
       </div>
       <div class="container">
-        <form>
+        <form class="row g-3 needs-validation" novalidate id="PrimerForm">
           <div class="form-group">
-            <label for="tipo-envio" class="large-label">Tipo de envío</label>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="premium" name="tipo-envio" value="premium">
-              <label class="form-check-label" for="premium">Premium 2 a 5 días (15%)</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="express" name="tipo-envio" value="express">
-              <label class="form-check-label" for="express">Express 5 a 8 días (7%)</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" id="normal" name="tipo-envio" value="normal">
-              <label class="form-check-label" for="normal">Standard 12 a 15 días (5%)</label>
+            <label for="tipo-envio" class="form-label">Tipo de envío</label>
+            <select class="form-select" id="TipoDeEnvio" required>
+              <option selected disabled value="">Elige...</option>
+              <option>Premium 2 a 5 días (15%)</option>
+              <option>Express 5 a 8 días (7%) </option>
+              <option>Standard 12 a 15 días (5%)</option>
+            </select>
+            <div class="invalid-tooltip alert alert-danger">
+              Debe selecionar algun metodo de envio
             </div>
           </div>
           <br>
@@ -129,33 +126,47 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="calle">Calle</label>
-                        <input type="text" class="form-control" id="calle" name="calle">
-                    </div>
+                        <label for="calle" class="form-label">Calle</label>
+                        <input type="text" class="form-control" id="calle" required>
+                        <div class="invalid-tooltip alert alert-danger">
+                          Debe colocar su calle
+                        </div>
+                    </div>                    
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="numero">Número</label>
-                        <input type="text" class="form-control" id="numero" name="numero">
-                    </div>
+                        <label for="numero" class="form-label">Número</label>
+                        <input type="text" class="form-control" id="numero" required>
+                        <div class="invalid-tooltip alert alert-danger">
+                          Debe colocar un numero de telefono
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="esquina">Esquina</label>
-                        <input type="text" class="form-control" id="esquina" name="esquina">
-                    </div>
+                        <label for="esquina" class="form-label">Esquina</label>
+                        <input type="text" class="form-control" id="esquina" name="esquina" required>
+                        <div class="invalid-tooltip alert alert-danger">
+                          Debe poner su esquina
+                        </div>
+                    </div>         
                 </div>
             </div>
         </div>
-    </form>
     </div>
     <hr />
     <div class="container">
-      <div class="Forma-pago">
+      <div class="Forma-pago" id="MetodPago">
           <label for="Forma-pago" class="large-label">Forma de pago</label>
-          <p>No ha seleccionado <a href="#" class="custom-select-link" data-bs-toggle="modal" data-bs-target="#paymentModal">Seleccionar</a></p>
+          <p>No ha seleccionado <a href="#" class="custom-select-link" data-bs-toggle="modal" data-bs-target="#paymentModal" id="BtnmetodPago">Seleccionar</a></p>
+          <p class="alert alert-danger invisible" id="P-nometodopago"> Debe seleccionar un metodo de pago </p>
+          
+          <div>
+            <button type="submit" class="btn btn-primary">Finalizar compra</button>
+          </div>
+
           <!-- Contenido del modal -->
           <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -165,19 +176,18 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                          <form>
                               <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard">
+                                  <input class="form-check-input"  type="radio" name="paymentMethod" id="creditCard" value="creditCard">
                                   <label class="form-check-label" for="creditCard">Tarjeta de crédito</label>
                                   <hr>
                                   <div class="form-group">
                                       <div class="row">
                                           <div class="col-md-6">
-                                              <label for="cardNumber">Número de Tarjeta</label>
+                                              <label for="cardNumber" class="form-label">Número de Tarjeta</label>
                                               <input type="text" class="form-control" id="cardNumber" name="cardNumber">
                                           </div>
                                           <div class="col-md-4">
-                                              <label for="securityCode">Código de Seg.</label>
+                                              <label for="securityCode" class="form-label">Código de Seg.</label>
                                               <input type="text" class="form-control" id="securityCode" name="securityCode">
                                           </div>
                                       </div>
@@ -185,7 +195,7 @@
                                   <br>
                                   <div class="row">
                                       <div class="col-md-6">
-                                          <label for="expirationDate">Vencimiento (MM/AA)</label>
+                                          <label for="expirationDate" class="form-label">Vencimiento (MM/AA)</label>
                                           <input type="text" class="form-control" id="expirationDate" name="expirationDate">
                                       </div>
                                   </div>
@@ -198,13 +208,12 @@
                                   <div class="form-group">
                                       <div class="row">
                                           <div class="col-md-6">
-                                              <label for="accountNumber">Número de Cuenta</label>
+                                              <label for="accountNumber" class="form-label">Número de Cuenta</label>
                                               <input type="text" class="form-control" id="accountNumber" name="accountNumber">
                                           </div>
                                       </div>
                                   </div>
                               </div>
-                          </form>
                       </div>
                       <div class="modal-footer">
                           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
@@ -213,7 +222,9 @@
               </div>
           </div>
       </div>
+    </form>
   </div>
+
     </main>
     <footer class="text-muted">
       <div class="container">
@@ -241,5 +252,6 @@
     <script src="js/cart.js"></script>
     <script src="js/validacion.js"></script>
     <script src="js/darkMode.js"></script>
+    <script src="js/ValidacionesCart.js"></script>
   </body>
 </html>
