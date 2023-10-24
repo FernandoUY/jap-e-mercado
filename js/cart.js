@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // se calcula el precio total inicial
-  calculateTotalPrice();
+  calculateSubTotalPrice();
+  
 });
 
 function showProductRow(products) {
@@ -69,7 +70,7 @@ function updateProductTotal(event) {
   totalGeneral.textContent = `${currency} ${totalPrice.toFixed(2)}`;
 }
 
-function calculateTotalPrice() {
+function calculateSubTotalPrice() {
   const productRows = document.querySelectorAll(".table-group-divider tr");
   let totalPrice = 0;
 
@@ -83,7 +84,7 @@ function calculateTotalPrice() {
 
   // Actualizar el precio total general
   const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `${currency} ${totalPrice.toFixed(2)}`;
+  totalGeneral.textContent = `${currency} ${totalPrice}`;
 }
 
 function getArticlesFromLocalStorage() {
@@ -119,24 +120,11 @@ document.addEventListener('DOMContentLoaded', function () {
             securityCodeInput.disabled = false;
             expirationDateInput.disabled = false;
             accountNumberInput.disabled = true;
-
-            cardNumberInput.setAttribute("required", "")
-            securityCodeInput.setAttribute("required", "")
-            expirationDateInput.setAttribute("required", "")
-
-            accountNumberInput.removeAttribute("required", "")
-        
         } else if (paymentMethodRadios[1].checked) {
             cardNumberInput.disabled = true;
             securityCodeInput.disabled = true;
             expirationDateInput.disabled = true;
             accountNumberInput.disabled = false;
-
-            cardNumberInput.removeAttribute("required", "")
-            securityCodeInput.removeAttribute("required", "")
-            expirationDateInput.removeAttribute("required", "")
-
-            accountNumberInput.setAttribute("required", "")
         }
     }
 
@@ -144,4 +132,57 @@ document.addEventListener('DOMContentLoaded', function () {
     paymentMethodRadios.forEach(function (radio) {
         radio.addEventListener('change', toggleFields);
     })})
+
+
+function DetectPriceEnvio(){
+  //Valor del list del tipo de envio
+  let tipeEnvio = document.getElementById("TipoDeEnvio").value;
+  
+  //Variables de envio
+  const subtotalCell = document.getElementById("total-general").textContent;
+  const costoEnvio = document.getElementById("costoEnvio");
+  const totalFinal = document.getElementById("totalFinal");
+
+  const subtotal = parseFloat(
+    subtotalCell.replace(`${currency} `, "")
+  );
+
+  let CostoFinal = 0
+
+  if(tipeEnvio === "Premium 2 a 5 días (15%)"){
+    CostoFinal = subtotal * 0.15
+
+    costoEnvio.innerText = Math.trunc(CostoFinal)
+
+    totalFinal.innerText = Math.trunc((CostoFinal + subtotal))
+
+  }
+  else if(tipeEnvio === "Express 5 a 8 días (7%)"){
+    CostoFinal = subtotal * 0.07
+
+    costoEnvio.innerText = Math.trunc(CostoFinal)
+
+    totalFinal.innerText = Math.trunc(CostoFinal + subtotal)
+
     
+
+  }
+  else if(tipeEnvio === "Standard 12 a 15 días (5%)"){
+    CostoFinal = subtotal * 0.05
+
+    costoEnvio.innerText = Math.trunc(CostoFinal)
+
+    totalFinal.innerText = Math.trunc(CostoFinal + subtotal)
+
+  }
+  else{
+    
+    costoEnvio.innerText = CostoFinal
+  }
+}
+
+let tipeEnvio = document.getElementById("TipoDeEnvio")
+
+tipeEnvio.addEventListener("change", function(){
+  DetectPriceEnvio()
+})

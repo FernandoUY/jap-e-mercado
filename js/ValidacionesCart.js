@@ -21,8 +21,6 @@
         })
       });
 
-
-
 // Funcion que busca si algun tipo de pago
 
 function ValidarTipoDeEnvio() {
