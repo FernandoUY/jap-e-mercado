@@ -61,7 +61,7 @@ function Val_DatosEnvio() {
     if (!validCreditCardRegexp.test(cardNumberInput.value)) {
       metodPago.innerHTML += `
       <div class="alert alert-danger">
-        Debe escribir un numero de taFaltan datos de tu tarjetarjeta correcto (16 numeros en total separados por - o espacios)
+        Debe escribir un numero de tarjeta correcto (16 numeros en total)
       </div>`;
     }
 
