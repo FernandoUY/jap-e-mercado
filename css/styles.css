@@ -115,13 +115,13 @@ footer p {
   max-height: 100%;
 }
 
-.alert {
+/*.alert {
   position: fixed;
   top: 80px;
   width: 50%;
   left: 50%;
   transform: translate(-50%, 0);
-}
+}*/
 
 .lds-ring {
   display: inline-block;
@@ -293,4 +293,21 @@ a.custom-card:hover {
 .large-label {
   font-size: 24px;
   margin-bottom: 10px;
+}
+
+.alert {
+  margin-bottom: 10px ;
+  position: static;
+  width: fit-content ;
+}
+
+#aviso-compra-exitosa {
+    display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
