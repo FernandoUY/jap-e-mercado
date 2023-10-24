@@ -8,6 +8,16 @@
             event.preventDefault()
             ValidarTipoDeEnvio()
             Val_DatosEnvio()
+
+//verificamos la validacion para mostrar aviso de compra exitosa
+            if (element.checkValidity()) {
+                if (ValidarTipoDeEnvio()) {
+                
+                    var avisoCompraExitosa = document.getElementById("aviso-compra-exitosa");
+                    avisoCompraExitosa.style.display = "block";
+
+                }
+            }
         })
       });
 
@@ -24,12 +34,16 @@ function ValidarTipoDeEnvio() {
         
         nometodopago.classList.remove("invisible")
         BtnmetodPago.classList.add("text-danger")
+        return false; 
     }
     else if((!(paymentMethodRadios[0].checked)) || (!(paymentMethodRadios[1].checked))){
 
         nometodopago.classList.add("invisible")
         BtnmetodPago.classList.remove("text-danger")
+
     }
+
+    return true;
 }
 
 //funcion para avisar que faltan datos en el tipo de pago
@@ -49,11 +63,12 @@ function Val_DatosEnvio(){
         }
     }
 
-    if(paymentMethodRadios[1].checked){
-        if(accountNumberInput.value === ""){
+    if (paymentMethodRadios[1].checked) {
+        if (accountNumberInput.value === "") {
             metodPago.innerHTML += `<div class="alert alert-danger">
             Faltan datos de tu banco
           </div>`
         }
     }
+    
 }
