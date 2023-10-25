@@ -1,5 +1,4 @@
 let articles = [];
-const currency = "USD";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Realizamos una petición a la URL donde se encuentra el carrito de compras del usuario con id 25801 y guardamos data un una variable
@@ -17,7 +16,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // se calcula el precio total inicial
-  calculateTotalPrice();
+  calculateSubTotalPrice();
+  
 });
 
 function showProductRow(products) {
@@ -26,14 +26,17 @@ function showProductRow(products) {
   tBody.innerHTML = ""
 
   products.forEach((product) => {
-    const { id, name, image, unitCost, count } = product;
-    const subtotal = (unitCost * count).toFixed(2);
+    const { id, name, currency, image, unitCost, count } = product;
+    let subtotal = (unitCost * count).toFixed(1);
+    if (currency === "UYU") {
+      subtotal = ((unitCost / 40) * count).toFixed(1);
+    }
 
     tBody.innerHTML += `
     <tr>
       <th scope="row"><img src="${image}" class="d-none d-sm-block" width="128" /></th>
       <td>${name}</td>
-      <td class="unit-cost">${currency} ${unitCost.toFixed(2)}</td>
+      <td class="unit-cost">${currency} ${unitCost.toFixed(1)}</td>
       <td class="col-1"><input type="number" class="form-control quantity-input" min="1" max="10" value="${count}" /></td>
       <td class="subtotal">${currency} ${subtotal}</td>
       <td>
@@ -57,33 +60,41 @@ function updateProductTotal(event) {
 
     const quantity = parseInt(quantityInput.value);
     const unitCost = parseFloat(
-      unitCostCell.textContent.split("USD")[1].trim()
+      unitCostCell.textContent.split(" ")[1].trim()
     );
-    const subtotal = quantity * unitCost;
-    subtotalCell.textContent = `${currency} ${subtotal.toFixed(2)}`;
-    totalPrice += subtotal;
+    const currency = unitCostCell.textContent.split(" ")[0];
+    let subtotal = quantity * unitCost;
+    if (currency === "UYU") {
+      subtotal = (unitCost / 40) * quantity
+    }
+    subtotalCell.textContent = `USD ${subtotal.toFixed(2)}`;
+    totalPrice += subtotal
   });
 
   // se actualiza el precio total general
   const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `${currency} ${totalPrice.toFixed(2)}`;
+  totalGeneral.textContent = `USD ${totalPrice}`;
 }
 
-function calculateTotalPrice() {
+function calculateSubTotalPrice() {
   const productRows = document.querySelectorAll(".table-group-divider tr");
   let totalPrice = 0;
 
   productRows.forEach((row) => {
     const subtotalCell = row.querySelector(".subtotal");
-    const subtotal = parseFloat(
-      subtotalCell.textContent.replace(`${currency} `, "")
+    let subtotal = parseFloat(
+      subtotalCell.textContent.split(" ")[1]
     );
+    const currency = subtotalCell.textContent.split(" ")[0];
+    if (currency === "UYU") {
+      subtotal = subtotal / 40;
+    }
     totalPrice += subtotal;
   });
 
   // Actualizar el precio total general
   const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `${currency} ${totalPrice.toFixed(2)}`;
+  totalGeneral.textContent = `USD ${totalPrice}`;
 }
 
 function getArticlesFromLocalStorage() {
@@ -101,7 +112,7 @@ function deleteArticle(id) {
   quantityInputs.forEach((input) => {
     input.addEventListener("change", updateProductTotal);
   });
-  calculateTotalPrice()
+  calculateSubTotalPrice()
   addArticlesToLocalStorage()
 }
 
@@ -119,24 +130,11 @@ document.addEventListener('DOMContentLoaded', function () {
             securityCodeInput.disabled = false;
             expirationDateInput.disabled = false;
             accountNumberInput.disabled = true;
-
-            cardNumberInput.setAttribute("required", "")
-            securityCodeInput.setAttribute("required", "")
-            expirationDateInput.setAttribute("required", "")
-
-            accountNumberInput.removeAttribute("required", "")
-        
         } else if (paymentMethodRadios[1].checked) {
             cardNumberInput.disabled = true;
             securityCodeInput.disabled = true;
             expirationDateInput.disabled = true;
             accountNumberInput.disabled = false;
-
-            cardNumberInput.removeAttribute("required", "")
-            securityCodeInput.removeAttribute("required", "")
-            expirationDateInput.removeAttribute("required", "")
-
-            accountNumberInput.setAttribute("required", "")
         }
     }
 
@@ -144,4 +142,57 @@ document.addEventListener('DOMContentLoaded', function () {
     paymentMethodRadios.forEach(function (radio) {
         radio.addEventListener('change', toggleFields);
     })})
+
+
+function DetectPriceEnvio(){
+  //Valor del list del tipo de envio
+  let tipeEnvio = document.getElementById("TipoDeEnvio").value;
+  
+  //Variables de envio
+  const subtotalCell = document.getElementById("total-general");
+  const costoEnvio = document.getElementById("costoEnvio");
+  const totalFinal = document.getElementById("totalFinal");
+
+  const subtotal = parseFloat(
+    subtotalCell.textContent.split(" ")[1]
+  );
+
+  let CostoFinal = 0
+
+  if(tipeEnvio === "Premium 2 a 5 días (15%)"){
+    CostoFinal = subtotal * 0.15
+
+    costoEnvio.innerText = CostoFinal.toFixed(1)
+
+    totalFinal.innerText = (CostoFinal + subtotal).toFixed(1)
+
+  }
+  else if(tipeEnvio === "Express 5 a 8 días (7%)"){
+    CostoFinal = subtotal * 0.07
+
+    costoEnvio.innerText = CostoFinal.toFixed(1)
+
+    totalFinal.innerText = (CostoFinal + subtotal).toFixed(1)
+
     
+
+  }
+  else if(tipeEnvio === "Standard 12 a 15 días (5%)"){
+    CostoFinal = subtotal * 0.05
+
+    costoEnvio.innerText = CostoFinal.toFixed(1)
+
+    totalFinal.innerText = (CostoFinal + subtotal).toFixed(1)
+
+  }
+  else{
+    
+    costoEnvio.innerText = CostoFinal.toFixed(1)
+  }
+}
+
+let tipeEnvio = document.getElementById("TipoDeEnvio")
+
+tipeEnvio.addEventListener("change", function(){
+  DetectPriceEnvio()
+})
