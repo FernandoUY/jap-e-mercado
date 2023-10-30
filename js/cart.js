@@ -1,198 +1,123 @@
-let articles = [];
+let userCart = JSON.parse(localStorage.getItem("userCart")) || {
+  user: 25801,
+  articles: [],
+};
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // Realizamos una petición a la URL donde se encuentra el carrito de compras del usuario con id 25801 y guardamos data un una variable
-  const userCart = await getJSONData(CART_INFO_URL + "25801.json");
-  articles = userCart.data.articles;
-
-  getArticlesFromLocalStorage().forEach(article => articles.push(article))
-
-  showProductRow(articles);
-
-  // se crea evento de cambio de cantidad
-  const quantityInputs = document.querySelectorAll("input[type='number']");
-  quantityInputs.forEach((input) => {
-    input.addEventListener("change", updateProductTotal);
+document.addEventListener("DOMContentLoaded", async function () {
+  const shippingType = document.querySelectorAll("input[name='shipping-type']");
+  shippingType.forEach((inp) => {
+    inp.addEventListener("change", function () {
+      calculateTotals();
+    });
   });
-
-  // se calcula el precio total inicial
-  calculateSubTotalPrice();
-  
+  const cartData = await getJSONData(CART_INFO_URL + "25801.json");
+  saveArticleToLocalStorage(cartData.data.articles[0]);
+  showArticles();
+  calculateTotals();
 });
 
-function showProductRow(products) {
-  const tBody = document.querySelector(".table-group-divider");
+function showArticles() {
+  const cartArticles = document.querySelector("#cart-articles");
 
-  tBody.innerHTML = ""
+  cartArticles.innerHTML = "";
 
-  products.forEach((product) => {
-    const { id, name, currency, image, unitCost, count } = product;
-    let subtotal = (unitCost * count).toFixed(1);
-    if (currency === "UYU") {
-      subtotal = ((unitCost / 40) * count).toFixed(1);
-    }
-
-    tBody.innerHTML += `
-    <tr>
-      <th scope="row"><img src="${image}" class="d-none d-sm-block" width="128" /></th>
-      <td>${name}</td>
-      <td class="unit-cost">${currency} ${unitCost.toFixed(1)}</td>
-      <td class="col-1"><input type="number" class="form-control quantity-input" min="1" max="10" value="${count}" /></td>
-      <td class="subtotal">${currency} ${subtotal}</td>
-      <td>
-        <button class="btn" onclick="deleteArticle(${id})">
-          <i class="fa fa-trash" style="color: red;"></i>
-        </button>
-      </td>
-    </tr>
+  userCart.articles.forEach((article) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><img src="${article.image}" width="128" alt="${article.name}"></td>
+      <td>${article.name}</td>
+      <td>${article.currency} ${article.unitCost}</td>
+      <td><input type="number" name="count" min="1" max="10" class="form-control" onchange="updateArticleCount(${
+        article.id
+      }, this.value)" value="${article.count}" /></td>
+      <td>USD ${
+        article.currency === "UYU"
+          ? (article.unitCost / 40) * article.count
+          : article.unitCost * article.count
+      }</td>
+      <td><button class="btn btn-danger" onclick="deleteArticle(${
+        article.id
+      })"><i class="fa fa-trash"></i></button></td>
     `;
+
+    cartArticles.appendChild(tr);
   });
 }
 
-function updateProductTotal(event) {
-  let totalPrice = 0;
-  const productRows = document.querySelectorAll(".table-group-divider tr");
-
-  productRows.forEach((row) => {
-    const quantityInput = row.querySelector(".quantity-input");
-    const unitCostCell = row.querySelector(".unit-cost");
-    const subtotalCell = row.querySelector(".subtotal");
-
-    const quantity = parseInt(quantityInput.value);
-    const unitCost = parseFloat(
-      unitCostCell.textContent.split(" ")[1].trim()
-    );
-    const currency = unitCostCell.textContent.split(" ")[0];
-    let subtotal = quantity * unitCost;
-    if (currency === "UYU") {
-      subtotal = (unitCost / 40) * quantity
-    }
-    subtotalCell.textContent = `USD ${subtotal.toFixed(2)}`;
-    totalPrice += subtotal
-  });
-
-  // se actualiza el precio total general
-  const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `USD ${totalPrice}`;
-}
-
-function calculateSubTotalPrice() {
-  const productRows = document.querySelectorAll(".table-group-divider tr");
-  let totalPrice = 0;
-
-  productRows.forEach((row) => {
-    const subtotalCell = row.querySelector(".subtotal");
-    let subtotal = parseFloat(
-      subtotalCell.textContent.split(" ")[1]
-    );
-    const currency = subtotalCell.textContent.split(" ")[0];
-    if (currency === "UYU") {
-      subtotal = subtotal / 40;
-    }
-    totalPrice += subtotal;
-  });
-
-  // Actualizar el precio total general
-  const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `USD ${totalPrice}`;
-}
-
-function getArticlesFromLocalStorage() {
-  return JSON.parse(localStorage.getItem("userCart"))?.articles || []
-}
-
-function addArticlesToLocalStorage() {
-  localStorage.setItem("userCart", JSON.stringify(articles));
-}
-
-function deleteArticle(id) {
-  articles = articles.filter(article => article.id !== id)
-  showProductRow(articles)
-  const quantityInputs = document.querySelectorAll("input[type='number']");
-  quantityInputs.forEach((input) => {
-    input.addEventListener("change", updateProductTotal);
-  });
-  calculateSubTotalPrice()
-  addArticlesToLocalStorage()
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    let paymentMethodRadios = document.querySelectorAll('input[name="paymentMethod"]');
-    let cardNumberInput = document.getElementById('cardNumber');
-    let securityCodeInput = document.getElementById('securityCode');
-    let expirationDateInput = document.getElementById('expirationDate');
-    let accountNumberInput = document.getElementById('accountNumber');
-
-    // Función para habilitar o deshabilitar campos según la selección
-    function toggleFields() {
-        if (paymentMethodRadios[0].checked) {
-            cardNumberInput.disabled = false;
-            securityCodeInput.disabled = false;
-            expirationDateInput.disabled = false;
-            accountNumberInput.disabled = true;
-        } else if (paymentMethodRadios[1].checked) {
-            cardNumberInput.disabled = true;
-            securityCodeInput.disabled = true;
-            expirationDateInput.disabled = true;
-            accountNumberInput.disabled = false;
-        }
-    }
-
-    // Escuchar cambios en la opción de forma de pago
-    paymentMethodRadios.forEach(function (radio) {
-        radio.addEventListener('change', toggleFields);
-    })})
-
-
-function DetectPriceEnvio(){
-  //Valor del list del tipo de envio
-  let tipeEnvio = document.getElementById("TipoDeEnvio").value;
-  
-  //Variables de envio
-  const subtotalCell = document.getElementById("total-general");
-  const costoEnvio = document.getElementById("costoEnvio");
-  const totalFinal = document.getElementById("totalFinal");
-
-  const subtotal = parseFloat(
-    subtotalCell.textContent.split(" ")[1]
+function deleteArticle(articleId) {
+  userCart.articles = userCart.articles.filter(
+    (article) => article.id !== articleId
   );
-
-  let CostoFinal = 0
-
-  if(tipeEnvio === "Premium 2 a 5 días (15%)"){
-    CostoFinal = subtotal * 0.15
-
-    costoEnvio.innerText = CostoFinal.toFixed(1)
-
-    totalFinal.innerText = (CostoFinal + subtotal).toFixed(1)
-
-  }
-  else if(tipeEnvio === "Express 5 a 8 días (7%)"){
-    CostoFinal = subtotal * 0.07
-
-    costoEnvio.innerText = CostoFinal.toFixed(1)
-
-    totalFinal.innerText = (CostoFinal + subtotal).toFixed(1)
-
-    
-
-  }
-  else if(tipeEnvio === "Standard 12 a 15 días (5%)"){
-    CostoFinal = subtotal * 0.05
-
-    costoEnvio.innerText = CostoFinal.toFixed(1)
-
-    totalFinal.innerText = (CostoFinal + subtotal).toFixed(1)
-
-  }
-  else{
-    
-    costoEnvio.innerText = CostoFinal.toFixed(1)
-  }
+  saveUserCartToLocalStorage(userCart);
+  calculateTotals();
+  showArticles();
 }
 
-let tipeEnvio = document.getElementById("TipoDeEnvio")
+function saveArticleToLocalStorage(article) {
+  const isArticleInCart = userCart.articles.some(
+    (art) => art.id === article.id
+  );
+  if (!isArticleInCart) {
+    userCart.articles.push(article);
+  }
+  localStorage.setItem("userCart", JSON.stringify(userCart));
+}
 
-tipeEnvio.addEventListener("change", function(){
-  DetectPriceEnvio()
-})
+function saveUserCartToLocalStorage() {
+  localStorage.setItem("userCart", JSON.stringify(userCart));
+}
+
+function updateArticleCount(articleId, newCount) {
+  userCart.articles = userCart.articles.map((article) => {
+    if (article.id === articleId) {
+      article.count = newCount;
+    }
+    return article;
+  });
+  saveUserCartToLocalStorage();
+  calculateTotals();
+  showArticles();
+}
+
+function calculateTotals() {
+  // Seleccionamos los elementos del DOM
+  const subtotalEl = document.querySelector("#subtotal");
+  const shippingEl = document.querySelector("#envio");
+  const totalEl = document.querySelector("#total");
+
+  // Calcular el subtotal
+  const subtotal = userCart.articles.reduce((acc, article) => {
+    if (article.currency === "UYU") {
+      return acc + (article.unitCost / 40) * article.count;
+    }
+
+    return acc + article.unitCost * article.count;
+  }, 0);
+
+  // Calcular el envío
+  const selectedShippingType = document.querySelector(
+    'input[name="shipping-type"]:checked'
+  ).value;
+
+  let shippingCost = 0;
+
+  switch (selectedShippingType) {
+    case "standard":
+      shippingCost = subtotal * 0.05;
+      break;
+    case "express":
+      shippingCost = subtotal * 0.07;
+      break;
+    case "premium":
+      shippingCost = subtotal * 0.15;
+      break;
+  }
+
+  // Calcular el total
+  const total = subtotal + shippingCost;
+
+  // Mostrar los resultados
+  subtotalEl.innerHTML = `USD ${subtotal}`;
+  shippingEl.innerHTML = `USD ${shippingCost}`;
+  totalEl.innerHTML = `USD ${total}`;
+}
