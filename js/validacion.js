@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-  if (!localStorage.getItem("token")) {
+  const user = JSON.parse(localStorage.getItem("user"))
+
+  if (!user) {
     window.location = "login.html";
   } else {
-    let usermail = localStorage.getItem("user");
+    let userName = user.email.split("@")[0];
 
     document.getElementById("dropdown").innerHTML += `
     <a
@@ -11,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
       data-bs-toggle="dropdown"
       aria-expanded="false"
     >
-      ${usermail}
+      ${userName}
     </a>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>

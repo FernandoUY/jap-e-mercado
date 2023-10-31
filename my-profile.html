@@ -95,12 +95,91 @@
         </label>
       </div>
     </nav>
-    <main>
-      <div class="container">
-        <div class="alert alert-danger text-center" role="alert">
-          <h4 class="alert-heading">Funcionalidad en desarrollo</h4>
+    <main class="mt-5">
+      <form class="container needs-validation" id="profile-form" novalidate>
+        <h1 class="text-center">Profile</h1>
+        <hr />
+
+        <div class="row row-cols-2">
+          <div class="col">
+            <div class="form-check">
+              <label for="first-name" class="form-check-label"
+                >Primer nombre</label
+              >
+              <input
+                class="form-control"
+                type="text"
+                name=""
+                id="first-name"
+                required
+              />
+              <div class="invalid-feedback">Por favor, introduce tu primer nombre</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="second-name" class="form-check-label"
+                >Segundo nombre</label
+              >
+              <input
+                class="form-control"
+                type="text"
+                name=""
+                id="second-name"
+                required
+              />
+              <div class="invalid-feedback">Por favor, introduce tu segundo nombre</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="first-lastname" class="form-check-label"
+                >Primer apellido</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="first-lastname"
+                required
+              />
+              <div class="invalid-feedback">Por favor, introduce primer apellido</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="second-lastname" class="form-check-label"
+                >Segundo apellido</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="second-lastname"
+                required
+              />
+              <div class="invalid-feedback">Por favor, introduce tu segundo apellido</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="email" class="form-check-label">E-mail</label>
+              <input type="email" class="form-control" id="email" required />
+              <div class="invalid-feedback">Por favor, introduce tu email</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="phone">Teléfono de contacto</label>
+              <input type="tel" class="form-control" id="phone" required pattern="(09[1-9])\d{6}" />
+              <div class="invalid-feedback">Por favor, introduce tu teléfono/movil de contacto</div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <hr />
+        <div class="d-grid">
+          <button class="btn btn-primary" type="submit">Guardar cambios</button>
+        </div>
+      </form>
     </main>
     <footer class="text-muted">
       <div class="container">

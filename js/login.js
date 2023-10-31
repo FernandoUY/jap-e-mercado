@@ -7,12 +7,16 @@ const token = () => {
 };
 
 document.addEventListener("submit", function () {
-  const emailValue = document.getElementById("emailInput").value //se obtiene el valor del email
+  const emailInp = document.getElementById("emailInput").value; //se obtiene el valor del email
+  const user = {
+    firstName: null,
+    secondName: null,
+    firstLastname: null,
+    secondLastname: null,
+    email: emailInp,
+    phone: null,
+    token: token(),
+  };
 
-  let emailValueUser = emailValue.slice(0, -10)
-
-  localStorage.setItem("token", token());
-  localStorage.setItem("user", emailValueUser);
+  localStorage.setItem("user", JSON.stringify(user));
 });
-
-
