@@ -137,7 +137,7 @@ function showProductInfo(product) {
       image: images[0]
     }
     // Buscamos en localStorage el usuario y los artículos en caso de existir, si no, creamos un array vacío
-    const user = localStorage.getItem("user");
+    const user = 25801;
     const articles = JSON.parse(localStorage.getItem("userCart"))?.articles || [];
 
     // Si el producto ya se encuentra en el carrito retornamos la función
