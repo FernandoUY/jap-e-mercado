@@ -95,10 +95,77 @@
         </label>
       </div>
     </nav>
-    <main>
-      <div class="container">
-        <div class="alert alert-danger text-center" role="alert">
-          <h4 class="alert-heading">Funcionalidad en desarrollo</h4>
+    <main class="mt-5">
+      <form class="container needs-validation" novalidate onsubmit="return false">
+        <h1 class="text-center">Perfil</h1>
+        <hr />
+        <div class="row row-cols-2">
+          <div class="col">
+            <div class="form-check">
+              <label for="first-name">Primer nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="first-name"
+                required
+              />
+              <div class="invalid-feedback">
+                Por favor, ingresa tu primer nombre
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="second-name">Segundo nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="second-name"
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="first-lastname">Primer apellido</label>
+              <input
+                type="text"
+                class="form-control"
+                id="first-lastname"
+                required
+              />
+              <div class="invalid-feedback">
+                Por favor, ingresa tu primer apellido
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="second-lastname">Segundo apellido</label>
+              <input
+                type="text"
+                class="form-control"
+                id="second-lastname"
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" required />
+              <div class="invalid-feedback">Por favor, ingresa tu email</div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-check">
+              <label for="phone">Telefono</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phone"
+                pattern="(09[1-9])\d{6}"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </main>
