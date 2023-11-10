@@ -311,3 +311,20 @@ a.custom-card:hover {
       padding: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
+#profile-container {
+  position: fixed;
+  top: 10%;
+  right: 15%;
+  width: 70px; 
+  height: auto;
+  border-radius: 1%;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+#profile-image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
