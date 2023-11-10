@@ -1,4 +1,3 @@
-
 //Todos los elementos input
 document.addEventListener("DOMContentLoaded", function () {
   const user = JSON.parse(localStorage.getItem("userDetails"))
@@ -21,6 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
         form.classList.add('was-validated')
       }, false)
     })
+
+    loadUserDetailsIntoForm();
 });
 
 
@@ -42,6 +43,17 @@ function getUserDetails(){
     phone: phone.value,
   };
 
-  localStorage.setItem("userDetails", JSON.stringify(userDetails));
+  localStorage.setItem("userDetails", JSON.stringify(userDetails));  
+}
 
+function loadUserDetailsIntoForm() {
+  const user = JSON.parse(localStorage.getItem("userDetails"));
+
+  if (user) {
+  document.getElementById("first-name").setAttribute("value",`${user.firstName}`)
+  document.getElementById("second-name").setAttribute("value",`${user.secondName}`)
+  document.getElementById("first-lastname").setAttribute("value",`${user.firstLastname}`)
+  document.getElementById("second-lastname").setAttribute("value",`${user.secondLastname}`)
+  document.getElementById("phone").setAttribute("value",`${user.phone}`)
+  }
 }
