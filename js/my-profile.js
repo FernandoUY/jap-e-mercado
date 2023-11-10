@@ -1,3 +1,4 @@
+
 //Todos los elementos input
 document.addEventListener("DOMContentLoaded", function () {
   const user = JSON.parse(localStorage.getItem("userDetails"))
@@ -44,5 +45,3 @@ function getUserDetails(){
   localStorage.setItem("userDetails", JSON.stringify(userDetails));
 
 }
-
-

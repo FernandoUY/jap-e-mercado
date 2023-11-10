@@ -1,188 +1,227 @@
-let articles = [];
-const currency = "USD";
+let userCart = JSON.parse(localStorage.getItem("userCart")) || {
+  user: 25801,
+  articles: [],
+};
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // Realizamos una petición a la URL donde se encuentra el carrito de compras del usuario con id 25801 y guardamos data un una variable
-  const userCart = await getJSONData(CART_INFO_URL + "25801.json");
-  articles = userCart.data.articles;
-
-  getArticlesFromLocalStorage().forEach(article => articles.push(article))
-
-  showProductRow(articles);
-
-  // se crea evento de cambio de cantidad
-  const quantityInputs = document.querySelectorAll("input[type='number']");
-  quantityInputs.forEach((input) => {
-    input.addEventListener("change", updateProductTotal);
+document.addEventListener("DOMContentLoaded", () => {
+  getJSONData(CART_INFO_URL + "25801.json").then((res) => {
+    const isArticleInCart = userCart.articles.find(
+      (article) => article.id === res.data.articles[0].id
+    );
+    if (!isArticleInCart) {
+      addArticleToCart(res.data.articles[0]);
+    }
+    calculateTotal();
+    showArticlesInCart();
   });
 
-  // se calcula el precio total inicial
-  calculateSubTotalPrice();
-  
+  // Escuchamos los cambios en los input de tipo de envío y calculamos el total cada vez que cambia el envío seleccionado
+  const radioBtns = document.querySelectorAll("input[name='shipping-type']");
+  radioBtns.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      calculateTotal();
+    });
+  });
+
+  // Escuchamos los cambios en los input de tipo de pago y calculamos el total cada vez que cambia el tipo de pago seleccionado
+  const paymentBtns = document.querySelectorAll("input[name='payment-method']");
+  paymentBtns.forEach((radio) => {
+    radio.addEventListener("change", handleChangePaymentMethod);
+  });
+
+  // Cuando carga la página, calculamos el total y mostramos los artículos del carrito
+  calculateTotal();
+  showArticlesInCart();
 });
 
-function showProductRow(products) {
-  const tBody = document.querySelector(".table-group-divider");
-
-  tBody.innerHTML = ""
-
-  products.forEach((product) => {
-    const { id, name, image, unitCost, count } = product;
-    const subtotal = (unitCost * count).toFixed(2);
-
-    tBody.innerHTML += `
-    <tr>
-      <th scope="row"><img src="${image}" class="d-none d-sm-block" width="128" /></th>
-      <td>${name}</td>
-      <td class="unit-cost">${currency} ${unitCost.toFixed(2)}</td>
-      <td class="col-1"><input type="number" class="form-control quantity-input" min="1" max="10" value="${count}" /></td>
-      <td class="subtotal">${currency} ${subtotal}</td>
+// Función para mostrar los artículos en el carrito
+function showArticlesInCart() {
+  const tableBody = document.querySelector("tbody");
+  tableBody.innerHTML = "";
+  userCart.articles.forEach((article) => {
+    const tr = document.createElement("tr");
+    tr.classList.add("align-middle");
+    tr.innerHTML = `
       <td>
-        <button class="btn" onclick="deleteArticle(${id})">
-          <i class="fa fa-trash" style="color: red;"></i>
-        </button>
+        <img src="${article.image}" width="128" alt="${article.name}" />
       </td>
-    </tr>
+      <td>${article.name}</td>
+      <td>${article.currency} ${article.unitCost}</td>
+      <td><input type="number" onchange="updateArticleCount(this, ${
+        article.id
+      })" class="form-control" min="1" max="10" value="${article.count}" /></td>
+      <td>USD ${
+        article.currency === "UYU"
+          ? (article.unitCost / 40) * article.count
+          : article.unitCost * article.count
+      }</td>
+      <td><button class="btn btn-danger" onclick="removeArticleFromCart(${
+        article.id
+      })">Eliminar</button></td>
     `;
+    tableBody.appendChild(tr);
   });
 }
 
-function updateProductTotal(event) {
-  let totalPrice = 0;
-  const productRows = document.querySelectorAll(".table-group-divider tr");
-
-  productRows.forEach((row) => {
-    const quantityInput = row.querySelector(".quantity-input");
-    const unitCostCell = row.querySelector(".unit-cost");
-    const subtotalCell = row.querySelector(".subtotal");
-
-    const quantity = parseInt(quantityInput.value);
-    const unitCost = parseFloat(
-      unitCostCell.textContent.split("USD")[1].trim()
-    );
-    const subtotal = quantity * unitCost;
-    subtotalCell.textContent = `${currency} ${subtotal.toFixed(2)}`;
-    totalPrice += subtotal;
-  });
-
-  // se actualiza el precio total general
-  const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `${currency} ${totalPrice.toFixed(2)}`;
+// Función para agregar un producto al carrito
+function addArticleToCart(article) {
+  userCart.articles.push(article);
+  localStorage.setItem("userCart", JSON.stringify(userCart));
 }
 
-function calculateSubTotalPrice() {
-  const productRows = document.querySelectorAll(".table-group-divider tr");
-  let totalPrice = 0;
-
-  productRows.forEach((row) => {
-    const subtotalCell = row.querySelector(".subtotal");
-    const subtotal = parseFloat(
-      subtotalCell.textContent.replace(`${currency} `, "")
-    );
-    totalPrice += subtotal;
-  });
-
-  // Actualizar el precio total general
-  const totalGeneral = document.getElementById("total-general");
-  totalGeneral.textContent = `${currency} ${totalPrice}`;
-}
-
-function getArticlesFromLocalStorage() {
-  return JSON.parse(localStorage.getItem("userCart"))?.articles || []
-}
-
-function addArticlesToLocalStorage() {
-  localStorage.setItem("userCart", JSON.stringify(articles));
-}
-
-function deleteArticle(id) {
-  articles = articles.filter(article => article.id !== id)
-  showProductRow(articles)
-  const quantityInputs = document.querySelectorAll("input[type='number']");
-  quantityInputs.forEach((input) => {
-    input.addEventListener("change", updateProductTotal);
-  });
-  calculateTotalPrice()
-  addArticlesToLocalStorage()
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    let paymentMethodRadios = document.querySelectorAll('input[name="paymentMethod"]');
-    let cardNumberInput = document.getElementById('cardNumber');
-    let securityCodeInput = document.getElementById('securityCode');
-    let expirationDateInput = document.getElementById('expirationDate');
-    let accountNumberInput = document.getElementById('accountNumber');
-
-    // Función para habilitar o deshabilitar campos según la selección
-    function toggleFields() {
-        if (paymentMethodRadios[0].checked) {
-            cardNumberInput.disabled = false;
-            securityCodeInput.disabled = false;
-            expirationDateInput.disabled = false;
-            accountNumberInput.disabled = true;
-        } else if (paymentMethodRadios[1].checked) {
-            cardNumberInput.disabled = true;
-            securityCodeInput.disabled = true;
-            expirationDateInput.disabled = true;
-            accountNumberInput.disabled = false;
-        }
-    }
-
-    // Escuchar cambios en la opción de forma de pago
-    paymentMethodRadios.forEach(function (radio) {
-        radio.addEventListener('change', toggleFields);
-    })})
-
-
-function DetectPriceEnvio(){
-  //Valor del list del tipo de envio
-  let tipeEnvio = document.getElementById("TipoDeEnvio").value;
-  
-  //Variables de envio
-  const subtotalCell = document.getElementById("total-general").textContent;
-  const costoEnvio = document.getElementById("costoEnvio");
-  const totalFinal = document.getElementById("totalFinal");
-
-  const subtotal = parseFloat(
-    subtotalCell.replace(`${currency} `, "")
+// Función para eliminar un producto del carrito
+function removeArticleFromCart(articleId) {
+  userCart.articles = userCart.articles.filter(
+    (article) => article.id !== articleId
   );
-
-  let CostoFinal = 0
-
-  if(tipeEnvio === "Premium 2 a 5 días (15%)"){
-    CostoFinal = subtotal * 0.15
-
-    costoEnvio.innerText = Math.trunc(CostoFinal)
-
-    totalFinal.innerText = Math.trunc((CostoFinal + subtotal))
-
-  }
-  else if(tipeEnvio === "Express 5 a 8 días (7%)"){
-    CostoFinal = subtotal * 0.07
-
-    costoEnvio.innerText = Math.trunc(CostoFinal)
-
-    totalFinal.innerText = Math.trunc(CostoFinal + subtotal)
-
-    
-
-  }
-  else if(tipeEnvio === "Standard 12 a 15 días (5%)"){
-    CostoFinal = subtotal * 0.05
-
-    costoEnvio.innerText = Math.trunc(CostoFinal)
-
-    totalFinal.innerText = Math.trunc(CostoFinal + subtotal)
-
-  }
-  else{
-    
-    costoEnvio.innerText = CostoFinal
-  }
+  localStorage.setItem("userCart", JSON.stringify(userCart));
+  calculateTotal();
+  showArticlesInCart();
 }
 
-let tipeEnvio = document.getElementById("TipoDeEnvio")
+// Función para actualizar el número de artículos
+function updateArticleCount(element, articleId) {
+  const count = parseInt(element.value);
+  userCart.articles = userCart.articles.map((article) => {
+    if (article.id === articleId) {
+      article.count = count > 10 ? 10 : count < 1 ? 1 : count;
+    }
+    return article;
+  });
+  localStorage.setItem("userCart", JSON.stringify(userCart));
+  calculateTotal();
+  showArticlesInCart();
+}
 
-tipeEnvio.addEventListener("change", function(){
-  DetectPriceEnvio()
-})
+// Función para calcular el total
+function calculateTotal() {
+  // Seleccionamos los elementos del DOM
+  const subtotalElement = document.getElementById("subtotal");
+  const shippingElement = document.getElementById("shipping");
+  const totalElement = document.getElementById("total");
+
+  // Creamos las variables
+  let subtotal = 0;
+  let shipping = 0;
+  let total = 0;
+
+  // Calculamos el subtotal
+  userCart.articles.forEach((article) => {
+    if (article.currency === "UYU") {
+      subtotal += (article.unitCost / 40) * article.count;
+    } else {
+      subtotal += article.unitCost * article.count;
+    }
+  });
+
+  // Calculamos el envío
+  const selectedRadio = document.querySelector(
+    'input[name="shipping-type"]:checked'
+  ).value;
+
+  switch (selectedRadio) {
+    case "premium":
+      shipping = subtotal * 0.15;
+      break;
+    case "express":
+      shipping = subtotal * 0.07;
+      break;
+    case "standard":
+      shipping = subtotal * 0.05;
+      break;
+  }
+
+  total = subtotal + shipping;
+
+  // Actualizamos los elementos para mostrar los totales
+  subtotalElement.innerHTML = `$${subtotal.toFixed(2)}`;
+  shippingElement.innerHTML = `$${shipping.toFixed(2)}`;
+  totalElement.innerHTML = `$${total.toFixed(2)}`;
+}
+
+function handleChangePaymentMethod(event) {
+  const paymentMethod = event.target.value;
+  const paymentInfo = document.querySelector("#payment-info");
+  const selectedPaymentEl = document.querySelector("#selected-payment");
+
+  switch (paymentMethod) {
+    case "credit-card":
+      paymentInfo.innerHTML = `
+      <div class="col-8">
+        <div class="form-check">
+          <label for="card-number" class="form-label"
+            >Número de tarjeta</label
+          >
+          <input
+            class="form-control"
+            type="number"
+            id="card-number"
+            placeholder="#### #### #### ####"
+            required
+          />
+          <div class="invalid-feedback">
+            Debes ingresar un número de tarjeta válido
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="form-check">
+          <label for="card-cvc" class="form-label">CVC</label>
+          <input
+            class="form-control"
+            type="number"
+            id="card-cvc"
+            required
+          />
+          <div class="invalid-feedback">
+            Debes ingresar un CVC
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <label for="card-expiration-date" class="form-label"
+            >Fecha de expiración</label
+          >
+          <input
+            class="form-control"
+            type="month"
+            id="card-expiration-date"
+            required
+          />
+          <div class="invalid-feedback">
+            Debes ingresar una fecha de expiración
+          </div>
+        </div>
+      </div>
+      `;
+      selectedPaymentEl.textContent = "Tarjeta de credito";
+      break;
+
+    case "bank-transfer":
+      paymentInfo.innerHTML = `
+      <div class="col-12">
+        <div class="form-check">
+          <label for="bank-account-number" class="form-label">Numero de cuenta</label>
+          <input
+            class="form-control"
+            type="number"
+            id="bank-account-number"
+            placeholder="#### #### #### ####"
+            required
+          />
+          <div class="invalid-feedback">
+            Debes ingresar un numero de cuenta bancario
+          </div>
+        </div>
+      </div>
+      `
+      selectedPaymentEl.textContent = "Transferencia Bancaria";
+      break;
+
+      default:
+        paymentInfo.innerHTML = "";
+        console.log("Default")
+        break
+  }
+}
