@@ -19,41 +19,9 @@ app.use(express.static("public"));
 app.use("/emercado-api", require("./routes/emercadoRoutes"));
 
 // Pages Routes
-app.get("/", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/index.html");
-});
+app.use(require("./routes/pagesRoutes"));
 
-app.get("/login", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/login.html");
-});
-
-app.get("/categories", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/categories.html");
-});
-
-app.get("/my-profile", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/my-profile.html");
-});
-
-app.get("/cart", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/cart.html");
-});
-
-app.get("/signout", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/signout.html");
-});
-
-app.get("/products", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/products.html");
-});
-
-app.get("/product-info", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/product-info.html");
-});
-
-app.get("/sell", (req, res) => {
-  res.sendFile("D:/emercado-api/pages/sell.html");
-});
+app.use(require("./routes/authRoutes"));
 
 // Error handler
 app.use(handleErrors);
