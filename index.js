@@ -1,10 +1,21 @@
 // Imports
 const express = require("express");
 const handleErrors = require("./middlewares/handleError");
+const cookieSession = require("cookie-session");
 
 // Express initialization
 const app = express();
 const PORT = 3000;
+
+// Cookies session
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["key1", "key2"],
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+);
 
 // Body parser
 app.use(express.json());

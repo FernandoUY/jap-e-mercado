@@ -1,17 +1,27 @@
+const jwt = require("jsonwebtoken");
+const { customError } = require("../utils");
+
 // Authorization middleware with jwt
 const authorization = (req, res, next) => {
-  const token = req.headers.authorization;
+  try {
+    const token = req.session.token;
 
-  if (!token) {
-    return res.status(401).send("Unauthorized");
-  }
-
-  jwt.verify(token, "secret", (err, decoded) => {
-    if (err) {
-      return res.status(401).send("Unauthorized");
+    if (!token) {
+      return res.redirect("/login");
     }
-    next();
-  });
+
+    jwt.verify(token, "secret", (err, decoded) => {
+      if (err) {
+        return res.redirect("/login");
+      }
+
+      req.user = decoded;
+
+      next();
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = authorization;

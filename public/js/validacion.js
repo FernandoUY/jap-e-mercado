@@ -1,9 +1,12 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  if (!userDetails) {
-    window.location = "/login";
+document.addEventListener("DOMContentLoaded", async () => {
+  const res = await fetch("/getUser");
+
+  if (!res.ok) {
+    document.getElementById("nav-links").innerHTML += `
+    <a class="nav-link" href="/login">Iniciar sesión</a>
+    `;
   } else {
-    let userName = userDetails.email.split("@")[0];
+    const user = await res.json();
 
     document.getElementById("dropdown").innerHTML += `
     <a
@@ -12,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
       data-bs-toggle="dropdown"
       aria-expanded="false"
     >
-      ${userName}
+      ${user.email.split("@")[0]}
     </a>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="/my-profile">Mi perfil</a></li>
