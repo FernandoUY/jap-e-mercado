@@ -28,6 +28,19 @@ const getBuySuccessMsg = async () => {
   return JSON.parse(successMsg);
 };
 
+// Post new cart articles
+const postCartArticles = async (userId, articles) => {
+  const userCart = {
+    user: userId,
+    articles,
+  }
+  await fs.writeFile(
+    `./db/user_cart/${userId}.json`,
+    JSON.stringify(userCart)
+  );
+  return userCart;
+}
+
 // Get product by id
 const getProductById = async (productId) => {
   const products = await fs.readFile(
@@ -60,4 +73,5 @@ module.exports = {
   getProductById,
   getProductCommentsById,
   getUserCartByUserId,
+  postCartArticles
 };

@@ -28,6 +28,17 @@ const getSellSuccessMsg = async (req, res, next) => {
   }
 };
 
+const postCartArticles = async (req, res, next) => {
+  const { userId } = req.params;
+  const { articles } = req.body;
+  try {
+    const cart = await emercado.postCartArticles(parseInt(userId), articles);
+    return res.json(cart);
+  } catch (error) {
+    next(error);
+  }
+}
+
 const getBuySuccessMsg = async (req, res, next) => {
   try {
     const successMsg = await emercado.getBuySuccessMsg();
@@ -67,6 +78,7 @@ const getUserCartByUserId = async (req, res, next) => {
   }
 };
 
+
 module.exports = {
   getCategories,
   getProductsByCategory,
@@ -75,4 +87,5 @@ module.exports = {
   getProductById,
   getProductCommentsById,
   getUserCartByUserId,
+  postCartArticles,
 };
